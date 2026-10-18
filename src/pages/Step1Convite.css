@@ -1,0 +1,233 @@
+.page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.back-btn:hover {
+  color: var(--primary-color);
+}
+
+.step-badge {
+  background-color: rgba(255, 107, 0, 0.1);
+  color: var(--primary-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.step-content-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.page-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+  margin-bottom: 3rem;
+}
+
+.commitment-card {
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.commitment-title {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.commitment-text {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 2rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--primary-color);
+}
+
+.commitment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.signature-input {
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  transition: border-color 0.2s;
+}
+
+.signature-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+.pt-4 { padding-top: 1rem; }
+.border-t { border-top: 1px solid var(--border-color); }
+
+/* Valores */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem; /* Increased gap */
+  margin-top: 1rem;
+}
+
+.value-btn {
+  background-color: var(--bg-color-light); /* White background */
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 1rem; /* More padding */
+  border-radius: 12px; /* Nicer rounded corners */
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm); /* Added subtle shadow */
+  cursor: pointer;
+}
+
+.value-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.value-btn.selected {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+  font-weight: 600;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+}
+
+/* Reflexões */
+.reflections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* More space between questions */
+}
+
+.reflection-question {
+  font-size: 1.125rem;
+  color: var(--text-primary); /* Changed to dark text to look less colorful/more elegant */
+  margin-bottom: 1rem;
+  font-family: var(--font-serif); /* Using serif for elegance */
+  font-weight: 600;
+}
+
+.reflection-textarea {
+  width: 100%;
+  min-height: 200px; /* Made much larger */
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem; /* Better internal spacing */
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); /* Inner shadow for depth */
+}
+
+.reflection-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
+  background-color: #fff;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 0;
+  gap: 1rem;
+}
+
+.success-icon {
+  color: var(--success-color);
+  margin-bottom: 1rem;
+}
+
+.success-state h2 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--text-primary);
+}
+
+.success-state p {
+  color: var(--text-secondary);
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}

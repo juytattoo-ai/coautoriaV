@@ -1,0 +1,199 @@
+.chart-container {
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-title {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+}
+
+.chart-wrapper {
+  min-height: 300px;
+}
+
+.empty-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: var(--text-muted);
+  text-align: center;
+  background-color: var(--bg-color);
+  border-radius: 12px;
+  border: 1px dashed var(--border-color);
+}
+
+.empty-chart p {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.chart-tooltip {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(4px);
+}
+
+.tooltip-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.tooltip-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.tooltip-score {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* Reusing dashed button from step 2 but specialized */
+.new-event-trigger {
+  width: 100%;
+  background-color: transparent;
+  border: 1px dashed var(--border-color);
+  color: var(--primary-color);
+  padding: 1.25rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.new-event-trigger:hover {
+  background-color: rgba(255, 107, 0, 0.05);
+  border-color: var(--primary-color);
+}
+
+.event-form-card {
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--primary-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.08);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.timeline-input {
+  width: 100%;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  transition: all 0.2s;
+}
+
+.timeline-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
+.timeline-range {
+  width: 100%;
+  accent-color: var(--primary-color);
+  margin-top: 0.75rem;
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.event-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s;
+}
+
+.event-list-item:hover {
+  transform: translateX(4px);
+  border-color: var(--primary-color);
+}
+
+.event-score-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.event-score-badge.positive {
+  background-color: rgba(0, 200, 81, 0.1);
+  color: var(--success-color);
+  border: 1px solid rgba(0, 200, 81, 0.2);
+}
+
+.event-score-badge.negative {
+  background-color: rgba(229, 57, 53, 0.1);
+  color: var(--danger-color);
+  border: 1px solid rgba(229, 57, 53, 0.2);
+}
+
+.event-score-badge.neutral {
+  background-color: var(--bg-color);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.event-info {
+  flex: 1;
+}
+
+.event-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.event-meta {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}

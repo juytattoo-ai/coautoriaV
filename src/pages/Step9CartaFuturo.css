@@ -1,0 +1,96 @@
+/* Reusing mostly from Step5Carta with additions for checklist */
+.checklist-card {
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.checklist-item:hover {
+  background-color: var(--bg-color);
+}
+
+.checkbox-wrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.checkbox-wrapper input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+  width: 24px;
+  background-color: transparent;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.checklist-item:hover input ~ .checkmark {
+  border-color: var(--primary-color);
+}
+
+.checkbox-wrapper input:checked ~ .checkmark {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-wrapper input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-wrapper .checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checklist-label {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.checkbox-wrapper input:checked + .checkmark + .checklist-label,
+.checkbox-wrapper input:checked ~ .checklist-label { /* Support depending on DOM structure */
+  color: var(--text-secondary);
+}

@@ -1,0 +1,121 @@
+.audio-recorder-container {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.audio-record-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: rgba(255, 107, 0, 0.08);
+  border: 1.5px dashed var(--primary-color);
+  border-radius: 12px;
+  color: var(--primary-color);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.audio-record-btn:hover {
+  background-color: rgba(255, 107, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.audio-recording-active {
+  background: #fff0eb;
+  border: 1px solid rgba(255, 107, 0, 0.3);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+}
+
+.recording-dot {
+  width: 12px;
+  height: 12px;
+  background-color: #e53935;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(229, 57, 53, 0.6);
+}
+
+.animate-pulse {
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  100% { transform: scale(1.2); opacity: 1; }
+}
+
+.recording-timer {
+  color: #1a1a1a;
+  font-variant-numeric: tabular-nums;
+  font-size: 1rem;
+}
+
+.recording-status {
+  color: #595959;
+}
+
+.audio-stop-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.audio-stop-btn:hover {
+  background: #c62828;
+}
+
+.audio-playback-card {
+  background: var(--bg-color-lighter);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.625rem 1rem;
+}
+
+.audio-play-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.audio-play-btn:hover {
+  transform: scale(1.05);
+}
+
+.audio-trash-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: opacity 0.2s;
+}
+
+.audio-trash-btn:hover {
+  opacity: 0.75;
+}
+
+.audio-error-msg {
+  color: var(--danger-color);
+  font-size: 0.8125rem;
+  margin-bottom: 0.5rem;
+}
+
+.hidden {
+  display: none;
+}

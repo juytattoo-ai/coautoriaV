@@ -1,0 +1,128 @@
+.conclusion-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 4rem 1rem;
+}
+
+.conclusion-wrapper {
+  max-width: 800px;
+  width: 100%;
+}
+
+.award-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  background-color: var(--bg-color-light);
+  border-radius: 50%;
+  border: 4px solid var(--border-color);
+  box-shadow: 0 0 40px rgba(255, 107, 0, 0.1);
+}
+
+.conclusion-title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.conclusion-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.summary-card {
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.summary-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-color);
+}
+
+.summary-icon-box {
+  width: 56px;
+  height: 56px;
+  background-color: var(--bg-color);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.summary-card-title {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.summary-card-content {
+  font-family: var(--font-serif);
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.highlight-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.summary-card-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--danger-color);
+}
+
+.status-dot.active {
+  background-color: var(--success-color);
+}
+
+.final-quote {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--primary-color);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.4;
+}

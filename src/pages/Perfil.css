@@ -1,0 +1,216 @@
+.perfil-page {
+  padding: 1.75rem 1.25rem 4rem;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .perfil-page {
+    padding: 3rem 2rem 5rem;
+  }
+}
+
+.perfil-header {
+  margin-bottom: 2.25rem;
+}
+
+.btn-logout {
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-xs);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-logout:hover {
+  background: var(--bg-color-lighter);
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.status-banner {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-banner.success {
+  background: #f1f8f3;
+  color: #1b6339;
+  border: 1px solid #c8e4d2;
+}
+
+.status-banner.error {
+  background: #fdf2f2;
+  color: #a82323;
+  border: 1px solid #f8c8c8;
+}
+
+/* Card de Progresso */
+.perfil-progress-card, .perfil-form-card, .lgpd-notice-card, .danger-zone-card {
+  background: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.5rem;
+}
+
+.progress-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+}
+
+.progress-percentage-pill {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--primary-color);
+  background: var(--primary-color-light);
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+  border: 1px solid rgba(184, 74, 32, 0.2);
+}
+
+.general-progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-color-lighter);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.general-progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 1px;
+  transition: width 0.5s ease;
+}
+
+.steps-progress-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.625rem;
+}
+
+@media (min-width: 600px) {
+  .steps-progress-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.step-stat-item {
+  background: var(--bg-color-tint);
+  padding: 0.625rem 0.875rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-color-light);
+}
+
+.step-stat-item.done {
+  border-color: rgba(43, 122, 75, 0.3);
+  background: #f8faf8;
+}
+
+.step-stat-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.step-stat-status {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+}
+
+.step-mini-bar {
+  width: 100%;
+  height: 3px;
+  background: var(--border-color);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.step-mini-fill.fill-full {
+  width: 100%;
+  height: 100%;
+  background: var(--success-color);
+}
+
+/* Formulário de Perfil */
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+}
+
+.perfil-avatar-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-xs);
+  background: var(--bg-color-tint);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.perfil-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.form-group-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xs);
+  font-size: 0.9375rem;
+  background: #ffffff;
+}
+
+.danger-zone-card {
+  border-color: rgba(201, 59, 59, 0.3);
+  background: #fdfcfc;
+}
+
+.danger-title {
+  color: var(--danger-color);
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+}
+
+.btn-danger-outline {
+  background: transparent;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-danger-outline:hover {
+  background: rgba(201, 59, 59, 0.08);
+}

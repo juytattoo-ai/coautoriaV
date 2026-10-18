@@ -1,0 +1,399 @@
+/* Hub Container Editorial & Mobile First */
+.hub-page {
+  padding: 1.75rem 1.25rem 3.5rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .hub-page {
+    padding: 3rem 2rem 5rem;
+    max-width: 880px;
+  }
+}
+
+/* 1. Masthead Editorial */
+.hub-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.hub-masthead-emblem {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hub-masthead-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(30, 25, 20, 0.08));
+}
+
+.hub-masthead-edition {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.hub-brand-name {
+  font-family: var(--font-serif);
+  font-size: 2.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+@media (max-width: 640px) {
+  .hub-brand-name {
+    font-size: 2.25rem;
+  }
+}
+
+.hub-brand-tagline {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  max-width: 440px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+
+.hub-masthead-rule {
+  width: 50px;
+  height: 1px;
+  background-color: var(--border-color-dark);
+  margin: 1.5rem auto 0;
+  opacity: 0.6;
+}
+
+/* 2. Hero Folio: Caderno de Bordo */
+.hub-journey-hero {
+  position: relative;
+  background: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hub-journey-hero:hover {
+  border-color: var(--border-color-dark);
+  box-shadow: var(--shadow-md);
+}
+
+.journey-hero-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+.journey-folio-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary-color);
+}
+
+.folio-icon {
+  color: var(--primary-color);
+}
+
+.journey-percentage-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.journey-hero-body {
+  margin-bottom: 1.5rem;
+}
+
+.journey-title {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+
+.journey-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.journey-progress-wrapper {
+  margin-top: 0.5rem;
+}
+
+.journey-progress-track {
+  width: 100%;
+  height: 3px;
+  background: var(--bg-color-lighter);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.journey-progress-fill {
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 1px;
+  transition: width 0.5s ease;
+}
+
+.btn-continue-journey {
+  width: 100%;
+  background: var(--text-primary);
+  color: #ffffff;
+  border: 1px solid var(--text-primary);
+  border-radius: var(--radius-xs);
+  padding: 0.9rem 1.4rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(24, 23, 21, 0.15);
+  transition: all 0.18s ease;
+}
+
+.btn-continue-journey:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(184, 74, 32, 0.25);
+}
+
+.btn-continue-journey:active {
+  transform: translateY(0);
+}
+
+/* 3. VOAR Summary Card */
+.hub-voar-summary-card {
+  background: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1.75rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+}
+
+@media (max-width: 640px) {
+  .hub-voar-summary-card {
+    padding: 1.35rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.voar-summary-header {
+  margin-bottom: 0.85rem;
+}
+
+.voar-summary-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary-color);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.voar-summary-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.voar-summary-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.voar-summary-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.75rem;
+}
+
+.voar-summary-pill {
+  padding: 0.75rem 1rem;
+  background: var(--bg-color-tint);
+  border-radius: var(--radius-xs);
+  border-left: 2px solid var(--primary-color);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.voar-summary-pill strong {
+  color: var(--text-primary);
+  font-size: 0.85rem;
+}
+
+/* 4. Cards Grid */
+.hub-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .hub-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+.hub-action-card {
+  background: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1.6rem 1.5rem 1.35rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 175px;
+  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden; /* Mantém o ícone contido no card */
+}
+
+.hub-action-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-color-dark);
+  box-shadow: var(--shadow-md);
+}
+
+.hub-action-card:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Ícone grande com fade no canto superior direito */
+.card-watermark-icon {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  color: var(--primary-color);
+  opacity: 0.08;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+
+.hub-action-card:hover .card-watermark-icon {
+  opacity: 0.18;
+  transform: scale(1.08) translate(-2px, 2px);
+  color: var(--primary-color);
+}
+
+
+
+.card-info {
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.card-main-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.01em;
+}
+
+.card-main-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 90%;
+}
+
+.card-footer-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--border-color-light);
+  position: relative;
+  z-index: 1;
+}
+
+.card-meta-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.card-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  letter-spacing: 0.02em;
+  transition: transform 0.18s ease;
+}
+
+.hub-action-card:hover .card-action-link {
+  transform: translateX(2px);
+}
+
+/* Editorial Status Seal */
+.editorial-news-seal {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  background: var(--primary-color-light);
+  border: 1px solid rgba(184, 74, 32, 0.3);
+  color: var(--primary-color);
+  border-radius: var(--radius-xs);
+}

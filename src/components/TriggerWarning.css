@@ -1,0 +1,58 @@
+.trigger-warning-container {
+  display: flex;
+  align-items: flex-start;
+  background-color: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-left: 4px solid var(--danger-color);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.trigger-icon-wrapper {
+  color: var(--danger-color);
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.trigger-content {
+  flex: 1;
+  padding-right: 2rem;
+}
+
+.trigger-title {
+  font-family: var(--font-sans);
+  color: var(--danger-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.trigger-text {
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.trigger-text strong {
+  color: #ff8888;
+  font-weight: 600;
+}
+
+.trigger-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.trigger-close-btn:hover {
+  color: var(--text-primary);
+}
