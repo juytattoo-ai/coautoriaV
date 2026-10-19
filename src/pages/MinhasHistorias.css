@@ -359,7 +359,8 @@
   border-radius: var(--radius-xs);
   font-family: var(--font-sans);
   font-size: 0.9375rem;
-  background: #ffffff;
+  background: var(--bg-color-light);
+  color: var(--text-primary);
   box-sizing: border-box;
 }
 

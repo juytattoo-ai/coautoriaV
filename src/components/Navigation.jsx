@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, Compass, BookOpen, Users, User } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 import './Navigation.css';
 
 const NAV_ITEMS = [
@@ -44,7 +45,10 @@ export default function Navigation() {
         </nav>
 
         <div className="sidebar-footer">
-          <span className="sidebar-version">Versão 1.0 · Mobile First</span>
+          <div className="sidebar-footer-row">
+            <span className="sidebar-version">Versão 1.0 · Mobile First</span>
+            <ThemeToggle />
+          </div>
         </div>
       </aside>
 

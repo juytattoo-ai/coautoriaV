@@ -1,0 +1,123 @@
+/* Slide Button: Minimalist Day/Night Mode (Pure Icons) */
+.theme-slide-toggle {
+  background: transparent;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  outline: none;
+  transition: transform 0.18s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.theme-slide-toggle:hover {
+  transform: scale(1.06);
+}
+
+.theme-slide-toggle:active {
+  transform: scale(0.94);
+}
+
+.theme-slide-toggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.theme-slide-track {
+  position: relative;
+  width: 52px;
+  height: 27px;
+  border-radius: 999px;
+  background: #ede8df;
+  border: 1px solid var(--border-color-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  transition: background-color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+  box-shadow: inset 0 1px 3px rgba(30, 25, 20, 0.1);
+}
+
+.theme-slide-toggle.dark .theme-slide-track {
+  background: #1b1d24;
+  border-color: #383e4d;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.track-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  z-index: 1;
+  transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+}
+
+.sun-icon {
+  color: #d97706; /* Warm golden sun */
+}
+
+.moon-icon {
+  color: #94a3b8; /* Soft moon */
+}
+
+.theme-slide-toggle.light .moon-icon {
+  opacity: 0.35;
+  transform: scale(0.9);
+}
+
+.theme-slide-toggle.light .sun-icon {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.theme-slide-toggle.dark .sun-icon {
+  opacity: 0.25;
+  transform: scale(0.9);
+}
+
+.theme-slide-toggle.dark .moon-icon {
+  opacity: 1;
+  color: #93c5fd; /* Radiant blue moon */
+  transform: scale(1.05);
+}
+
+/* Sliding Thumb (Handle) */
+.theme-slide-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(30, 25, 20, 0.2), 0 2px 6px rgba(30, 25, 20, 0.1);
+  transition: transform 0.28s cubic-bezier(0.34, 1.45, 0.64, 1), background-color 0.25s ease, box-shadow 0.25s ease;
+  z-index: 2;
+}
+
+.theme-slide-toggle.dark .theme-slide-thumb {
+  transform: translateX(25px);
+  background: #282c37;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), 0 0 8px rgba(147, 197, 253, 0.25);
+}
+
+.thumb-icon {
+  transition: transform 0.25s ease;
+}
+
+.thumb-icon.sun {
+  color: #b84a20;
+}
+
+.thumb-icon.moon {
+  color: #93c5fd;
+}

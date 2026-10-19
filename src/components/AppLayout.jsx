@@ -1,5 +1,6 @@
 import React from 'react';
 import Navigation from './Navigation';
+import ThemeToggle from './ThemeToggle';
 
 export default function AppLayout({ children }) {
   return (
@@ -14,6 +15,12 @@ export default function AppLayout({ children }) {
 
       <main className="coautoria-main-content">
         {children}
+
+        {/* Mobile footer with theme slide and version text */}
+        <footer className="mobile-app-footer">
+          <span className="mobile-version-text">Versão 1.0 · Mobile First</span>
+          <ThemeToggle />
+        </footer>
       </main>
     </div>
   );

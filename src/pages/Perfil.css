@@ -185,12 +185,12 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xs);
   font-size: 0.9375rem;
-  background: #ffffff;
+  background: var(--bg-color-light);
 }
 
 .danger-zone-card {
   border-color: rgba(201, 59, 59, 0.3);
-  background: #fdfcfc;
+  background: var(--bg-color-tint);
 }
 
 .danger-title {
