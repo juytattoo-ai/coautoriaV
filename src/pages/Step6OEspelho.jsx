@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, CheckCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { VoarStepCelebration, VoarStepProgressBar, VoarBackgroundConstellation } from '../components/VoarConstellation';
 import './Step6OEspelho.css';
 
 const QUESTIONS = [
@@ -25,6 +26,7 @@ export default function Step6OEspelho() {
   const [loading, setLoading] = useState(false);
   const [answers, setAnswers] = useState(Array(10).fill(''));
   const [isSaved, setIsSaved] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -87,6 +89,12 @@ export default function Step6OEspelho() {
 
   return (
     <div className="page-container animate-fade-in">
+      {showCelebration && (
+        <VoarStepCelebration
+          stepNumber={6}
+          onContinue={() => navigate('/passo-7')}
+        />
+      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
@@ -100,7 +108,9 @@ export default function Step6OEspelho() {
         </div>
       </header>
 
-      <main className="step-content-wrapper">
+      <main className="step-content-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+        <VoarBackgroundConstellation />
+        <VoarStepProgressBar currentStep={6} isStepDone={isComplete} />
         <span className="step-badge">PASSO 6 DE 9</span>
         <h1 className="page-title" style={{textAlign: 'left', marginTop: '1rem'}}>O Espelho</h1>
         <p className="page-subtitle" style={{textAlign: 'left', marginBottom: '3rem'}}>
@@ -146,7 +156,10 @@ export default function Step6OEspelho() {
             </button>
             <button 
               className="btn btn-primary" 
-              onClick={() => navigate('/passo-7')}
+              onClick={async () => {
+                await handleSaveAll();
+                setShowCelebration(true);
+              }}
             >
               Próximo Passo →
             </button>

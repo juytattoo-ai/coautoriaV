@@ -4,6 +4,7 @@ import { ArrowLeft, BookOpen, Plus, Sparkles, CheckCircle, Mic } from 'lucide-re
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import AudioRecorder from '../components/AudioRecorder';
+import { VoarStepCelebration, VoarStepProgressBar, VoarBackgroundConstellation } from '../components/VoarConstellation';
 import './Step2BlocoMagico.css';
 
 const NOTE_TYPES = ['Memória', 'Sonho', 'Insight', 'Conversa', 'Outro'];
@@ -13,6 +14,7 @@ export default function Step2BlocoMagico() {
   const { user } = useAuth();
   const [notes, setNotes] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   
   // Form state
   const [noteType, setNoteType] = useState('Memória');
@@ -79,6 +81,12 @@ export default function Step2BlocoMagico() {
 
   return (
     <div className="page-container animate-fade-in">
+      {showCelebration && (
+        <VoarStepCelebration
+          stepNumber={2}
+          onContinue={() => navigate('/passo-3')}
+        />
+      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
@@ -92,7 +100,9 @@ export default function Step2BlocoMagico() {
         </div>
       </header>
 
-      <main className="step-content-wrapper">
+      <main className="step-content-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+        <VoarBackgroundConstellation />
+        <VoarStepProgressBar currentStep={2} isStepDone={notes.length >= 2} />
         <span className="step-badge">PASSO 2 DE 9</span>
         <h1 className="page-title" style={{textAlign: 'left', marginTop: '1rem'}}>Bloco Mágico</h1>
         
@@ -192,7 +202,7 @@ export default function Step2BlocoMagico() {
             <CheckCircle size={20} />
             <span>{notes.length >= 2 ? 'Passo concluído' : `Faltam ${Math.max(0, 2 - notes.length)} anotações (min. 2)`}</span>
           </div>
-          <button className="btn btn-primary" onClick={() => navigate('/passo-3')} disabled={notes.length < 2}>
+          <button className="btn btn-primary" onClick={() => setShowCelebration(true)} disabled={notes.length < 2}>
             Próximo Passo →
           </button>
         </div>

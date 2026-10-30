@@ -233,3 +233,37 @@ CREATE POLICY "Usuários autenticados podem enviar áudios"
 ON storage.objects FOR INSERT
 TO authenticated
 WITH CHECK (bucket_id = 'audio_stories');
+
+-- ========================================================
+-- 12. Tabela: story_challenges (Banco de Desafios Criativos de 3 em 3 dias)
+-- ========================================================
+CREATE TABLE IF NOT EXISTS public.story_challenges (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    prompt TEXT NOT NULL,
+    hint TEXT DEFAULT '',
+    suggested_theme TEXT DEFAULT 'Lição de Vida',
+    sort_order INTEGER DEFAULT 1,
+    active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE public.story_challenges ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Leitura pública de desafios criativos" ON public.story_challenges;
+CREATE POLICY "Leitura pública de desafios criativos"
+ON public.story_challenges
+FOR SELECT
+USING (true);
+
+INSERT INTO public.story_challenges (id, title, prompt, hint, suggested_theme, sort_order)
+VALUES
+  ('ch-1', 'Ponte entre Memórias', 'Crie uma história que conecte duas histórias suas existentes.', 'Escolha duas lembranças de épocas diferentes e descubra o fio invisível que une quem você era nas duas situações.', 'Lição de Vida', 1),
+  ('ch-2', 'O Objeto no Seu Olhar', 'Crie uma história com algum objeto que está enxergando nesse exato momento.', 'Olhe ao seu redor agora. Escolha o primeiro objeto que chamar sua atenção e conte uma memória ou reflexão despertada por ele.', 'Alegre', 2),
+  ('ch-3', 'O Cheiro da Infância', 'Escreva uma história a partir de um cheiro ou sabor que leva você imediatamente de volta à infância.', 'Pode ser café passado na hora, terra molhada de chuva, bolo no forno ou o perfume de alguém querido.', 'Amor & Família', 3),
+  ('ch-4', 'A Frase que Ficou', 'Conte a história por trás de um conselho ou frase que alguém lhe disse e você nunca esqueceu.', 'Quem disse essa frase? Onde vocês estavam e por que essas palavras mudaram seu jeito de ver a vida?', 'Lição de Vida', 4),
+  ('ch-5', 'Desvio de Rota', 'Relate um pequeno imprevisto ou erro de caminho que acabou levando você a um encontro ou descoberta feliz.', 'Às vezes os melhores capítulos nascem quando o plano original dá errado.', 'Mudança de Vida', 5),
+  ('ch-6', 'Fotografia Imaginária', 'Se você pudesse tirar uma única fotografia de um momento que viveu sem câmera na mão, qual cena seria?', 'Descreva as cores, a luz, as pessoas presentes e o sentimento exato daquele instante.', 'Amor & Família', 6),
+  ('ch-7', 'Pequena Coragem Silenciosa', 'Conte sobre um dia em que você teve coragem sem que ninguém ao redor percebesse.', 'Nem toda bravura faz barulho. Qual foi a vitória íntima que só você sabe o quanto custou?', 'Superação', 7),
+  ('ch-8', 'Trilha Sonora de um Capítulo', 'Escolha uma música que marcou uma fase da sua vida e escreva a história que toca dentro dela.', 'Quando essa canção começa a tocar, para onde sua memória viaja imediatamente?', 'Sonhos & Desafios', 8)
+ON CONFLICT (id) DO NOTHING;

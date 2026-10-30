@@ -52,7 +52,7 @@
 }
 
 /* Card de Progresso */
-.perfil-progress-card, .perfil-form-card, .lgpd-notice-card, .danger-zone-card {
+.perfil-progress-card, .perfil-form-card, .perfil-onboarding-card, .lgpd-notice-card, .danger-zone-card {
   background: var(--bg-color-light);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
@@ -105,15 +105,20 @@
 }
 
 .step-stat-item {
-  background: var(--bg-color-tint);
+  background: transparent;
   padding: 0.625rem 0.875rem;
   border-radius: var(--radius-xs);
   border: 1px solid var(--border-color-light);
 }
 
 .step-stat-item.done {
-  border-color: rgba(43, 122, 75, 0.3);
-  background: #f8faf8;
+  background: transparent;
+  border-color: rgba(43, 122, 75, 0.35);
+}
+
+.text-success {
+  color: #22c55e;
+  flex-shrink: 0;
 }
 
 .step-stat-name {
@@ -180,12 +185,45 @@
   color: var(--text-secondary);
 }
 
-.form-input {
+.form-input,
+.perfil-input {
+  width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xs);
   font-size: 0.9375rem;
-  background: var(--bg-color-light);
+  background: var(--bg-color-tint);
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.perfil-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-color-light);
+}
+
+.avatar-edit-row {
+  margin-bottom: 1.5rem;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+}
+
+.input-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.perfil-save-actions {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-color-light);
 }
 
 .danger-zone-card {

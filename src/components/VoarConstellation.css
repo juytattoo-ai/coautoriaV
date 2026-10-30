@@ -1,0 +1,618 @@
+/* ==========================================================================
+   CONSTELAÇÃO V DE VOAR — CELEBRAÇÃO POR PASSO, BARRA DE PROGRESSO & FUNDO
+   ========================================================================== */
+
+/* 1. Constelação gigante e sutil de fundo para as páginas do V de VOAR */
+.voar-bg-constellation-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+@media (min-width: 992px) {
+  .voar-bg-constellation-layer {
+    left: 260px;
+  }
+}
+
+.voar-bg-constellation-svg {
+  width: 96vw;
+  max-width: 1360px;
+  height: 88vh;
+  max-height: 860px;
+  opacity: 0.85;
+  overflow: visible;
+}
+
+/* 2. Barra de Conclusão nos 9 Passos + Mini Constelação */
+.voar-step-progress-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  background: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 600px) {
+  .voar-step-progress-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+  }
+}
+
+.voar-step-progress-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.voar-step-progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.voar-step-progress-titles {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.voar-step-cycle-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary-color);
+  background: var(--primary-color-light);
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+}
+
+.voar-step-count-label {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.voar-step-count-label strong {
+  color: var(--text-primary);
+}
+
+.voar-step-saved-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.68rem;
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+/* Barra em 3 grupos de 3 etapas */
+.voar-triad-bars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.voar-triad-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.25rem;
+  padding: 3px;
+  background: var(--bg-color-tint);
+  border: 1px solid var(--border-color-light);
+  border-radius: 3px;
+}
+
+.voar-triad-segment {
+  height: 6px;
+  border-radius: 1.5px;
+  background: var(--border-color);
+  transition: all 0.35s ease;
+}
+
+.voar-triad-segment.done {
+  background: var(--primary-color);
+}
+
+.voar-triad-segment.current {
+  background: linear-gradient(90deg, var(--primary-color) 55%, rgba(184, 74, 32, 0.28) 100%);
+}
+
+.voar-triad-labels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.voar-triad-labels span.active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.voar-mini-constellation-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-color-tint);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-xs);
+  padding: 0.4rem 0.65rem;
+  min-width: 112px;
+}
+
+.voar-mini-constellation-svg {
+  width: 92px;
+  height: 58px;
+  overflow: visible;
+}
+
+.mini-constellation-label {
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   MODAL DE CELEBRAÇÃO A CADA PASSO CONCLUÍDO
+   ========================================================================== */
+.voar-celebration-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+  animation: voarOverlayFadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes voarOverlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.voar-celebration-inner {
+  width: 100%;
+  max-width: 540px;
+  min-height: min(100%, 660px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  padding: 1rem 0;
+  gap: 1.25rem;
+}
+
+.voar-celebration-top {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.voar-celebration-counter {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.voar-celebration-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.35rem;
+  width: 100%;
+}
+
+.voar-constellation-canvas {
+  position: relative;
+  width: 295px;
+  height: 235px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voar-constellation-ambient {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184, 74, 32, 0.11) 0%, transparent 72%);
+  pointer-events: none;
+}
+
+.voar-constellation-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.voar-line-unlit {
+  stroke: var(--border-color-dark);
+  stroke-width: 0.9;
+  stroke-dasharray: 2 5;
+  opacity: 0.45;
+}
+
+.voar-line-lit {
+  stroke: var(--primary-color);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  opacity: 0.82;
+}
+
+.voar-line-lit.is-secondary {
+  stroke-width: 0.95;
+  stroke-dasharray: 3 4;
+  opacity: 0.52;
+}
+
+.voar-line-igniting {
+  stroke: var(--primary-color);
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: voarDrawLine 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+}
+
+.voar-line-igniting.is-secondary {
+  stroke-width: 1.1;
+}
+
+.voar-line-animating {
+  stroke: var(--primary-color);
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: voarDrawLine 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.voar-line-animating.is-secondary {
+  stroke-width: 0.95;
+  stroke-dasharray: 3 4;
+  stroke-dashoffset: 0;
+  opacity: 0;
+  animation: voarFadeSecLine 0.8s ease forwards;
+}
+
+@keyframes voarDrawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes voarFadeSecLine {
+  from { opacity: 0; }
+  to { opacity: 0.55; }
+}
+
+.voar-star-unlit-dot {
+  fill: var(--border-color-dark);
+  opacity: 0.65;
+}
+
+.voar-star-number {
+  font-family: var(--font-sans);
+  font-size: 7.5px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  transition: fill 0.4s ease, opacity 0.4s ease;
+}
+
+.voar-star-number.is-unlit {
+  fill: var(--text-muted);
+  opacity: 0.42;
+}
+
+.voar-star-number.is-lit {
+  fill: var(--text-secondary);
+  opacity: 0.85;
+}
+
+.voar-star-number.is-igniting {
+  fill: var(--primary-color);
+  font-weight: 600;
+  opacity: 0;
+  animation: voarNumberIgnite 0.6s ease 0.65s forwards;
+}
+
+@keyframes voarNumberIgnite {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.voar-star-core-lit {
+  fill: var(--primary-color);
+}
+
+.voar-star-aura-loop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: voarStarPulse 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes voarStarPulse {
+  0% { transform: scale(0.8); opacity: 0.4; }
+  100% { transform: scale(1.25); opacity: 0.9; }
+}
+
+.voar-star-flare line {
+  stroke: var(--primary-color);
+  stroke-width: 0.8;
+  stroke-opacity: 0.65;
+}
+
+.voar-star-igniting-group {
+  opacity: 0;
+  animation: voarStarIgniteAppear 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
+}
+
+@keyframes voarStarIgniteAppear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.voar-star-ignition-core {
+  fill: var(--primary-color);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: voarCorePop 0.75s cubic-bezier(0.22, 1.4, 0.36, 1) 0.55s forwards;
+}
+
+@keyframes voarCorePop {
+  0% { transform: scale(0.2); }
+  60% { transform: scale(1.45); }
+  100% { transform: scale(1); }
+}
+
+.voar-star-ignition-ring {
+  stroke: var(--primary-color);
+  stroke-width: 1.2;
+  fill: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: voarIgnitionShockwave 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+}
+
+@keyframes voarIgnitionShockwave {
+  0% { transform: scale(0.5); opacity: 0.9; }
+  100% { transform: scale(3.4); opacity: 0; }
+}
+
+.voar-star-ignition-aura {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: voarStarPulse 2s ease-in-out 0.6s infinite alternate;
+}
+
+.voar-star-ignition-flare line {
+  stroke: var(--primary-color);
+  stroke-width: 0.95;
+  stroke-opacity: 0.85;
+}
+
+.voar-star-full-anim {
+  opacity: 0;
+  animation: voarStarIgniteAppear 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.voar-celebration-text {
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.voar-celebration-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--primary-color);
+}
+
+.voar-celebration-headline {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.55rem;
+  line-height: 1.32;
+  color: var(--text-primary);
+}
+
+@media (min-width: 640px) {
+  .voar-celebration-headline {
+    font-size: 1.75rem;
+  }
+}
+
+.voar-celebration-subtext {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* Card Motivacional a cada 3 etapas (Passos 3, 6 e 9) */
+.voar-milestone-pause-card {
+  margin-top: 0.5rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--bg-color-light);
+  border: 1px solid rgba(184, 74, 32, 0.3);
+  border-left: 3px solid var(--primary-color);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+}
+
+.milestone-pause-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary-color);
+  margin-bottom: 0.3rem;
+}
+
+.milestone-pause-title {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.milestone-pause-desc {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+@keyframes voarTextFadeUp {
+  0% { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.voar-fade-up-1 {
+  opacity: 0;
+  animation: voarTextFadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
+}
+
+.voar-fade-up-2 {
+  opacity: 0;
+  animation: voarTextFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.72s forwards;
+}
+
+.voar-fade-up-3 {
+  opacity: 0;
+  animation: voarTextFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+}
+
+.voar-celebration-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.35rem;
+}
+
+.voar-celebration-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background-color: var(--text-primary);
+  color: var(--bg-color);
+  border: 1px solid var(--text-primary);
+  border-radius: var(--radius-xs);
+  padding: 0.85rem 1.6rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+}
+
+.voar-celebration-btn:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.voar-celebration-btn-rest {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color-dark);
+  border-radius: var(--radius-xs);
+  padding: 0.8rem 1.2rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.voar-celebration-btn-rest:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: var(--primary-color-light);
+}
+
+/* ==========================================================================
+   CARD DA CONSTELAÇÃO COMPLETA NA PÁGINA DE CONCLUSÃO
+   ========================================================================== */
+.conclusion-constellation-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem auto;
+  padding: 1.5rem 1rem 1.25rem;
+  max-width: 460px;
+  background: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.conclusion-constellation-caption {
+  margin-top: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+}

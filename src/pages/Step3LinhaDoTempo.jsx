@@ -4,6 +4,7 @@ import { ArrowLeft, Plus, CheckCircle, Activity, Info } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { VoarStepCelebration, VoarStepProgressBar, VoarBackgroundConstellation } from '../components/VoarConstellation';
 import './Step3LinhaDoTempo.css';
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -27,6 +28,7 @@ export default function Step3LinhaDoTempo() {
   const [events, setEvents] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   // Form State
   const [title, setTitle] = useState('');
@@ -102,6 +104,12 @@ export default function Step3LinhaDoTempo() {
 
   return (
     <div className="page-container animate-fade-in">
+      {showCelebration && (
+        <VoarStepCelebration
+          stepNumber={3}
+          onContinue={() => navigate('/passo-4')}
+        />
+      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
@@ -115,7 +123,9 @@ export default function Step3LinhaDoTempo() {
         </div>
       </header>
 
-      <main className="step-content-wrapper">
+      <main className="step-content-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+        <VoarBackgroundConstellation />
+        <VoarStepProgressBar currentStep={3} isStepDone={events.length >= 5} />
         <span className="step-badge">PASSO 3 DE 9</span>
         <h1 className="page-title" style={{textAlign: 'left', marginTop: '1rem'}}>Linha do Tempo Emocional</h1>
         
@@ -268,7 +278,7 @@ export default function Step3LinhaDoTempo() {
               {events.length >= 5 ? 'Passo concluído' : `Faltam ${Math.max(0, 5 - events.length)} eventos`}
             </span>
           </div>
-          <button className="btn btn-primary" onClick={() => navigate('/passo-4')} disabled={events.length < 5}>
+          <button className="btn btn-primary" onClick={() => setShowCelebration(true)} disabled={events.length < 5}>
             Próximo Passo →
           </button>
         </div>

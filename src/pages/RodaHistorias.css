@@ -2,6 +2,7 @@
   padding: 1.75rem 1.25rem 4rem;
   max-width: 780px;
   margin: 0 auto;
+  position: relative;
 }
 
 @media (min-width: 768px) {
@@ -10,8 +11,101 @@
   }
 }
 
+/* Elemento gráfico minimalista de Fogueira no fundo (estilo traço de caderno) */
+.roda-campfire-backdrop {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+@media (min-width: 992px) {
+  .roda-campfire-backdrop {
+    left: 260px;
+  }
+}
+
+.campfire-bg-svg {
+  width: 100%;
+  height: 100%;
+  min-width: 1000px;
+  opacity: 0.9;
+}
+
+.roda-header,
+.roda-feed {
+  position: relative;
+  z-index: 1;
+}
+
 .roda-header {
   margin-bottom: 2.25rem;
+}
+
+.roda-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+@media (max-width: 560px) {
+  .roda-header-brand {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+.roda-campfire-emblem {
+  width: 66px;
+  height: 66px;
+  flex-shrink: 0;
+  background: var(--bg-color-light);
+  border: 1px solid rgba(184, 74, 32, 0.32);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(184, 74, 32, 0.1);
+}
+
+.campfire-emblem-svg {
+  width: 54px;
+  height: 54px;
+}
+
+.campfire-flame-outer {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: campfireFlicker 2.6s ease-in-out infinite alternate;
+}
+
+.campfire-flame-inner {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: campfireFlicker 1.9s ease-in-out 0.3s infinite alternate-reverse;
+}
+
+@keyframes campfireFlicker {
+  0% { transform: scaleY(0.96) scaleX(1.02) rotate(-1.5deg); }
+  100% { transform: scaleY(1.05) scaleX(0.97) rotate(1.5deg); }
+}
+
+.ember-spark {
+  animation: emberFloat 2.8s ease-in-out infinite;
+}
+.spark-1 { animation-delay: 0s; }
+.spark-2 { animation-delay: 0.9s; }
+.spark-3 { animation-delay: 1.7s; }
+
+@keyframes emberFloat {
+  0% { transform: translateY(3px); opacity: 0.2; }
+  50% { opacity: 0.95; }
+  100% { transform: translateY(-5px); opacity: 0; }
 }
 
 .btn-adm-moderation {
@@ -92,12 +186,17 @@
 }
 
 .feed-story-card {
-  background: var(--bg-color-light);
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(2px);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 1.75rem;
   box-shadow: var(--shadow-sm);
   transition: all 0.18s ease;
+}
+
+[data-theme="dark"] .feed-story-card {
+  background: rgba(24, 26, 32, 0.85);
 }
 
 .feed-story-card:hover {

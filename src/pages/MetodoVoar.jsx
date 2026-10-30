@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, ArrowRight, Feather, Music, Layout, Radio, Info, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react';
+import { VoarBackgroundConstellation } from '../components/VoarConstellation';
 import './MetodoVoar.css';
 
 const VOAR_MODULES = [
@@ -52,8 +53,9 @@ export default function MetodoVoar() {
   const [showMethodologyGuide, setShowMethodologyGuide] = useState(false);
 
   return (
-    <div className="voar-hub-page animate-fade-in">
-      <header className="voar-hub-header">
+    <div className="voar-hub-page animate-fade-in" style={{ position: 'relative' }}>
+      <VoarBackgroundConstellation />
+      <header className="voar-hub-header" style={{ position: 'relative', zIndex: 1 }}>
         <span className="voar-meta-tag">Jornada Completa de Autoria</span>
         <h1 className="voar-hub-title">Metodologia V.O.A.R.</h1>
         <p className="voar-hub-subtitle">
@@ -136,7 +138,7 @@ export default function MetodoVoar() {
       </header>
 
       {/* Grid com visual dos 4 módulos */}
-      <section className="voar-modules-overview">
+      <section className="voar-modules-overview" style={{ position: 'relative', zIndex: 1 }}>
         <div className="voar-modules-grid">
           {VOAR_MODULES.map((mod) => {
             const isVoice = mod.letter === 'V';

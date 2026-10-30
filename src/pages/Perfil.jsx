@@ -11,7 +11,9 @@ import {
   Camera, 
   LogOut,
   AlertTriangle,
-  Award
+  Award,
+  Sparkles,
+  Play
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
@@ -19,7 +21,7 @@ import { getUserVoarProgress, STEPS_METADATA } from '../lib/userProgress';
 import AuthForm from '../components/AuthForm';
 import './Perfil.css';
 
-export default function Perfil() {
+export default function Perfil({ onReplayOnboarding }) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState({ type: '', text: '' });
@@ -143,6 +145,29 @@ export default function Perfil() {
           <p className="page-sub">Faça login ou crie sua conta para gerenciar seus dados e progresso.</p>
         </header>
         <AuthForm />
+        <section className="perfil-onboarding-card mt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <Sparkles size={22} className="text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-base mb-1" style={{ fontFamily: 'var(--font-serif)' }}>
+                  Apresentação do App (Onboarding)
+                </h4>
+                <p className="text-xs text-secondary leading-relaxed">
+                  Reveja as 5 telas minimalistas de boas-vindas e a introdução aos recursos do Coautoria.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="btn btn-outline flex items-center gap-2 flex-shrink-0"
+              onClick={() => onReplayOnboarding && onReplayOnboarding()}
+            >
+              <Play size={15} />
+              <span>Rever Onboarding</span>
+            </button>
+          </div>
+        </section>
       </div>
     );
   }
@@ -270,7 +295,7 @@ export default function Perfil() {
           />
         </div>
 
-        <div className="input-row mb-5">
+        <div className="input-row">
           <label className="input-label flex items-center gap-1.5">
             <Lock size={15} /> Nova Senha (opcional)
           </label>
@@ -283,12 +308,39 @@ export default function Perfil() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-          <Save size={18} /> {loading ? 'Salvando...' : 'Salvar Alterações'}
-        </button>
+        <div className="perfil-save-actions">
+          <button type="submit" className="btn btn-primary w-full perfil-save-btn" disabled={loading}>
+            <Save size={18} /> {loading ? 'Salvando...' : 'Salvar Alterações'}
+          </button>
+        </div>
       </form>
 
-      {/* 3. Privacidade & Aviso Legal LGPD */}
+      {/* 3. Rever Apresentação (Onboarding) nas Configurações */}
+      <section className="perfil-onboarding-card mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <Sparkles size={22} className="text-primary flex-shrink-0 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-base mb-1" style={{ fontFamily: 'var(--font-serif)' }}>
+                Apresentação do App (Onboarding)
+              </h4>
+              <p className="text-xs text-secondary leading-relaxed">
+                Reveja as 5 telas minimalistas de boas-vindas, a animação da constelação do V de VOAR e a introdução aos recursos do Coautoria.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="btn btn-outline flex items-center gap-2 flex-shrink-0"
+            onClick={() => onReplayOnboarding && onReplayOnboarding()}
+          >
+            <Play size={15} />
+            <span>Rever Onboarding</span>
+          </button>
+        </div>
+      </section>
+
+      {/* 4. Privacidade & Aviso Legal LGPD */}
       <section className="lgpd-notice-card mb-6">
         <div className="flex items-start gap-3">
           <ShieldCheck size={26} className="text-primary flex-shrink-0 mt-0.5" />

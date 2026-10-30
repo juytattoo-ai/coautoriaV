@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Save, CheckCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { VoarStepCelebration, VoarStepProgressBar, VoarBackgroundConstellation } from '../components/VoarConstellation';
 import './Step4MapaDeVida.css';
 
 const CHAPTERS = [
@@ -39,6 +40,7 @@ export default function Step4MapaDeVida() {
   const [activeTab, setActiveTab] = useState(CHAPTERS[0].id);
   const [loading, setLoading] = useState(false);
   const [savedChapters, setSavedChapters] = useState({}); // To track which are saved
+  const [showCelebration, setShowCelebration] = useState(false);
   
   const [formData, setFormData] = useState({
     raizes: { ...initialChapterState },
@@ -132,6 +134,12 @@ export default function Step4MapaDeVida() {
 
   return (
     <div className="page-container animate-fade-in">
+      {showCelebration && (
+        <VoarStepCelebration
+          stepNumber={4}
+          onContinue={() => navigate('/passo-5')}
+        />
+      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
@@ -145,7 +153,9 @@ export default function Step4MapaDeVida() {
         </div>
       </header>
 
-      <main className="step-content-wrapper">
+      <main className="step-content-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+        <VoarBackgroundConstellation />
+        <VoarStepProgressBar currentStep={4} isStepDone={allChaptersSaved} />
         <span className="step-badge">PASSO 4 DE 9</span>
         <h1 className="page-title" style={{textAlign: 'left', marginTop: '1rem'}}>Mapa de Vida Universal</h1>
         
@@ -252,7 +262,7 @@ export default function Step4MapaDeVida() {
                 if (!allChaptersSaved) {
                   alert("Você precisa concluir e salvar os 4 grandes capítulos antes de prosseguir para o próximo passo.");
                 } else {
-                  navigate('/passo-5');
+                  setShowCelebration(true);
                 }
               }}
             >

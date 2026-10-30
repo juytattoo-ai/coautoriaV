@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useSearchParams } from 'react-router-dom';
 import { 
   Plus, 
   Mic, 
   Camera, 
   FileText, 
-  Share2, 
   Lock, 
   Globe, 
   Tag, 
-  Calendar, 
-  Play, 
-  Pause, 
-  Trash2, 
-  ExternalLink,
   Sparkles,
-  BookOpen
+  BookOpen,
+  Edit3,
+  Check
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
@@ -33,11 +31,14 @@ const THEMES = [
 
 export default function MinhasHistorias() {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState('todos'); // 'todos' | 'audio' | 'escrito' | 'digitado'
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [activeChallengePrompt, setActiveChallengePrompt] = useState('');
+  const [editingStory, setEditingStory] = useState(null);
 
   // Form State
   const [formatType, setFormatType] = useState('digitado'); // 'digitado' | 'audio' | 'escrito'
@@ -50,21 +51,42 @@ export default function MinhasHistorias() {
   const [imageFile, setImageFile] = useState(null);
   const [visibility, setVisibility] = useState('privado'); // 'privado' | 'publico' | 'anonimo'
 
-  // Playing audio state
-  const [playingStoryId, setPlayingStoryId] = useState(null);
+  // Verifica se veio de um Desafio Criativo na Home
+  useEffect(() => {
+    const desafioTitulo = searchParams.get('desafioTitulo');
+    const desafioPrompt = searchParams.get('desafioPrompt');
+    const desafioTema = searchParams.get('desafioTema');
+    if (desafioTitulo || desafioPrompt) {
+      setEditingStory(null);
+      setTitle(desafioTitulo ? `Desafio: ${desafioTitulo}` : '');
+      setContent('');
+      if (desafioTema && THEMES.includes(desafioTema)) {
+        setTheme(desafioTema);
+      }
+      setActiveChallengePrompt(desafioPrompt || '');
+      setFormatType('digitado');
+      setVisibility('privado');
+      setIsModalOpen(true);
+      // Limpa a query string da URL sem disparar re-navegação que feche o modal
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (user) {
       loadAllStories();
     } else {
+      const guestLocal = JSON.parse(localStorage.getItem('coautoria_stories_guest') || '[]');
+      setStories(guestLocal);
       setLoading(false);
     }
   }, [user]);
 
+  const getStorageKey = () => `coautoria_stories_${user?.id || 'guest'}`;
+
   const loadAllStories = async () => {
     setLoading(true);
     try {
-      // 1. Tentar carregar de user_stories (se existir)
       let all = [];
       const { data: userStories, error: uError } = await supabase
         .from('user_stories')
@@ -85,6 +107,7 @@ export default function MinhasHistorias() {
       if (rawStories && rawStories.length > 0) {
         const mappedRaw = rawStories.map(rs => ({
           id: `raw-${rs.id}`,
+          raw_db_id: rs.id,
           title: rs.title,
           content: rs.content || rs.lessons || '',
           theme: rs.emotion ? rs.emotion.charAt(0).toUpperCase() + rs.emotion.slice(1) : 'Superação',
@@ -94,8 +117,7 @@ export default function MinhasHistorias() {
           status: 'aprovado',
           created_at: rs.created_at || new Date().toISOString()
         }));
-        // Adicionar apenas os que não conflitam
-        all = [...all, ...mappedRaw];
+        all = [...all, ...mappedRaw.filter(r => !all.some(a => a.id === r.id))];
       }
 
       // 3. Carregar notas do Passo 2 (notes)
@@ -107,6 +129,7 @@ export default function MinhasHistorias() {
       if (notesData && notesData.length > 0) {
         const mappedNotes = notesData.map(n => ({
           id: `note-${n.id}`,
+          note_db_id: n.id,
           title: `Memória (${n.type || 'Bloco Mágico'})`,
           content: n.content,
           theme: 'Lição de Vida',
@@ -116,7 +139,7 @@ export default function MinhasHistorias() {
           status: 'aprovado',
           created_at: n.created_at || new Date().toISOString()
         }));
-        all = [...all, ...mappedNotes];
+        all = [...all, ...mappedNotes.filter(n => !all.some(a => a.id === n.id))];
       }
 
       // 4. Carregar cartas do Passo 5 (past_letters)
@@ -138,13 +161,16 @@ export default function MinhasHistorias() {
           status: 'aprovado',
           created_at: l.created_at || new Date().toISOString()
         }));
-        all = [...all, ...mappedLetters];
+        all = [...all, ...mappedLetters.filter(l => !all.some(a => a.id === l.id))];
       }
 
-      // Se localStorage tiver histórias locais salvas também compor
-      const localSaved = JSON.parse(localStorage.getItem(`coautoria_stories_${user.id}`) || '[]');
+      // Mesclar com alterações salvas localmente
+      const localSaved = JSON.parse(localStorage.getItem(getStorageKey()) || '[]');
       if (localSaved.length > 0) {
-        all = [...localSaved, ...all.filter(a => !localSaved.some(l => l.id === a.id))];
+        const localMap = new Map(localSaved.map(item => [item.id, item]));
+        const merged = all.map(item => localMap.get(item.id) || item);
+        const newLocalOnly = localSaved.filter(l => !all.some(a => a.id === l.id));
+        all = [...newLocalOnly, ...merged];
       }
 
       setStories(all);
@@ -152,6 +178,72 @@ export default function MinhasHistorias() {
       console.error('Erro ao carregar histórias:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const persistLocalStoryList = (updatedList) => {
+    try {
+      localStorage.setItem(getStorageKey(), JSON.stringify(updatedList));
+    } catch (e) {
+      console.warn('Erro ao salvar cache local:', e);
+    }
+  };
+
+  const handleOpenNewStoryModal = () => {
+    resetForm();
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (story) => {
+    setEditingStory(story);
+    setTitle(story.title || '');
+    setContent(story.content || '');
+    setTheme(story.theme && THEMES.includes(story.theme) ? story.theme : 'Superação');
+    setFormatType(story.format || 'digitado');
+    setAudioUrl(story.audio_url || null);
+    setAudioBlob(null);
+    setImageUrl(story.image_url || null);
+    setImageFile(null);
+    setVisibility(story.visibility || 'privado');
+    setActiveChallengePrompt('');
+    setIsModalOpen(true);
+  };
+
+  const handleSendToPublicArchive = async (story) => {
+    const isCurrentlyPublic = story.visibility !== 'privado';
+    const nextVisibility = isCurrentlyPublic ? 'privado' : 'publico';
+    const nextStatus = 'aprovado';
+
+    const updatedStory = {
+      ...story,
+      visibility: nextVisibility,
+      status: nextStatus,
+      author_name: user?.user_metadata?.full_name || story.author_name || 'Autor Coautoria'
+    };
+
+    const updatedList = stories.map(s => (s.id === story.id ? updatedStory : s));
+    setStories(updatedList);
+    persistLocalStoryList(updatedList);
+
+    if (user) {
+      try {
+        await supabase.from('user_stories').upsert([{
+          id: String(story.id),
+          user_id: user.id,
+          author_name: updatedStory.author_name,
+          title: updatedStory.title,
+          content: updatedStory.content || '',
+          theme: updatedStory.theme || 'Superação',
+          format: updatedStory.format || 'digitado',
+          audio_url: updatedStory.audio_url || null,
+          image_url: updatedStory.image_url || null,
+          visibility: nextVisibility,
+          status: nextStatus,
+          created_at: story.created_at || new Date().toISOString()
+        }], { onConflict: 'id' });
+      } catch (err) {
+        console.warn('Fallback local ao atualizar visibilidade:', err);
+      }
     }
   };
 
@@ -170,15 +262,14 @@ export default function MinhasHistorias() {
 
   const handleSaveStory = async (e) => {
     e.preventDefault();
-    if (!title.trim() || !user) return;
+    if (!title.trim()) return;
     setSaving(true);
 
     try {
       let finalAudioUrl = audioUrl;
       let finalImageUrl = imageUrl;
 
-      // 1. Upload de áudio se houver blob
-      if (audioBlob) {
+      if (user && audioBlob) {
         try {
           const fileName = `audio-${user.id}-${Date.now()}.webm`;
           const { error: uploadError } = await supabase.storage
@@ -193,8 +284,7 @@ export default function MinhasHistorias() {
         }
       }
 
-      // 2. Upload de imagem se houver foto manuscrita
-      if (imageFile) {
+      if (user && imageFile) {
         try {
           const fileName = `written-${user.id}-${Date.now()}-${imageFile.name}`;
           const { error: uploadError } = await supabase.storage
@@ -209,51 +299,78 @@ export default function MinhasHistorias() {
         }
       }
 
-      const newStoryRecord = {
-        id: `story-${Date.now()}`,
-        user_id: user.id,
-        author_name: user.user_metadata?.full_name || 'Autor Coautoria',
-        title,
+      const storyId = editingStory ? String(editingStory.id) : `story-${Date.now()}`;
+      const storyRecord = {
+        ...(editingStory || {}),
+        id: storyId,
+        user_id: user?.id || 'guest',
+        author_name: user?.user_metadata?.full_name || editingStory?.author_name || 'Autor Coautoria',
+        title: title.trim(),
         content,
         theme,
         format: formatType,
         audio_url: finalAudioUrl,
         image_url: finalImageUrl,
-        visibility, // 'privado' | 'publico' | 'anonimo'
-        status: visibility === 'privado' ? 'aprovado' : 'pendente_aprovacao', // Moderação ADM
-        likes_count: 0,
-        comments_count: 0,
-        created_at: new Date().toISOString()
+        visibility,
+        status: 'aprovado',
+        likes_count: editingStory?.likes_count || 0,
+        comments_count: editingStory?.comments_count || 0,
+        created_at: editingStory?.created_at || new Date().toISOString()
       };
 
-      // Tentar salvar no Supabase
-      const { data, error } = await supabase
-        .from('user_stories')
-        .insert([newStoryRecord])
-        .select();
+      if (user) {
+        try {
+          await supabase
+            .from('user_stories')
+            .upsert([{
+              id: storyRecord.id,
+              user_id: user.id,
+              author_name: storyRecord.author_name,
+              title: storyRecord.title,
+              content: storyRecord.content,
+              theme: storyRecord.theme,
+              format: storyRecord.format,
+              audio_url: storyRecord.audio_url,
+              image_url: storyRecord.image_url,
+              visibility: storyRecord.visibility,
+              status: storyRecord.status,
+              created_at: storyRecord.created_at
+            }], { onConflict: 'id' });
 
-      const savedStory = (data && data[0]) ? data[0] : newStoryRecord;
+          // Se for uma história originada no Passo 8 ou Passo 2, atualiza a tabela de origem também
+          if (editingStory?.raw_db_id) {
+            await supabase
+              .from('raw_stories')
+              .update({ title: storyRecord.title, content: storyRecord.content })
+              .eq('id', editingStory.raw_db_id);
+          } else if (editingStory?.note_db_id) {
+            await supabase
+              .from('notes')
+              .update({ content: storyRecord.content })
+              .eq('id', editingStory.note_db_id);
+          }
+        } catch (dbErr) {
+          console.warn('Salvo localmente:', dbErr);
+        }
+      }
 
-      // Persistir também localmente para segurança
-      const localSaved = JSON.parse(localStorage.getItem(`coautoria_stories_${user.id}`) || '[]');
-      localStorage.setItem(`coautoria_stories_${user.id}`, JSON.stringify([savedStory, ...localSaved]));
+      const nextStories = editingStory
+        ? stories.map(s => (s.id === editingStory.id ? storyRecord : s))
+        : [storyRecord, ...stories];
 
-      setStories(prev => [savedStory, ...prev]);
+      setStories(nextStories);
+      persistLocalStoryList(nextStories);
       setIsModalOpen(false);
       resetForm();
-
-      if (visibility !== 'privado') {
-        alert('História salva com sucesso! Como você escolheu compartilhar, ela foi enviada para a validação da moderação antes de aparecer na Roda de Histórias.');
-      }
     } catch (err) {
       console.error('Erro ao salvar história:', err);
-      alert('Erro ao salvar. Sua história foi gravada no acervo local.');
     } finally {
       setSaving(false);
     }
   };
 
   const resetForm = () => {
+    setEditingStory(null);
     setTitle('');
     setContent('');
     setFormatType('digitado');
@@ -263,6 +380,7 @@ export default function MinhasHistorias() {
     setImageUrl(null);
     setImageFile(null);
     setVisibility('privado');
+    setActiveChallengePrompt('');
   };
 
   const filteredStories = stories.filter(story => {
@@ -272,6 +390,8 @@ export default function MinhasHistorias() {
 
   return (
     <div className="historias-page animate-fade-in">
+      {/* Fundo de folha pautada de caderno mais presente nesta página */}
+      <div className="historias-notebook-backdrop" aria-hidden="true" />
       <header className="historias-header">
         <div className="header-top-row">
           <div>
@@ -282,10 +402,10 @@ export default function MinhasHistorias() {
             </p>
           </div>
 
-          {/* Botão de Mais no Canto com visual flutuante elegante */}
           <button 
+            type="button"
             className="btn-add-story-fab"
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleOpenNewStoryModal}
             title="Adicionar nova história"
           >
             <Plus size={22} />
@@ -293,7 +413,7 @@ export default function MinhasHistorias() {
           </button>
         </div>
 
-        {/* Abas de Formato: Todos, Áudio, Escrito, Digitado */}
+        {/* Abas de Formato */}
         <div className="format-tabs-bar">
           <button 
             className={`format-tab-btn ${activeTab === 'todos' ? 'active' : ''}`}
@@ -333,106 +453,167 @@ export default function MinhasHistorias() {
             <p className="empty-desc">
               Você pode adicionar suas próprias histórias gravando um áudio, enviando foto de escrita à mão ou digitando.
             </p>
-            <button className="btn btn-primary mt-4" onClick={() => setIsModalOpen(true)}>
+            <button type="button" className="btn btn-primary mt-4" onClick={handleOpenNewStoryModal}>
               <Plus size={18} /> Adicionar Minha Primeira História
             </button>
           </div>
         ) : (
-          filteredStories.map((story) => (
-            <div key={story.id} className="story-card-item animate-fade-in">
-              <div className="story-card-header">
-                <span className="story-theme-badge">
-                  <Tag size={12} /> {story.theme || 'Vida'}
-                </span>
-                <div className="story-vis-badge">
-                  {story.visibility === 'privado' ? (
-                    <span className="vis-privado flex items-center gap-1" title="Apenas você pode ver">
-                      <Lock size={12} /> Privado
+          filteredStories.map((story) => {
+            const isPublic = story.visibility && story.visibility !== 'privado';
+            return (
+              <div key={story.id} className="story-card-item">
+                <div className="story-card-header">
+                  <span className="story-theme-badge">
+                    <Tag size={12} /> {story.theme || 'Vida'}
+                  </span>
+                  <div className="story-vis-badge">
+                    {!isPublic ? (
+                      <span className="vis-privado flex items-center gap-1" title="Apenas você pode ver">
+                        <Lock size={12} /> Privado
+                      </span>
+                    ) : (
+                      <span className="vis-publico flex items-center gap-1" title="Visível no Acervo Público (Roda de Histórias)">
+                        <Globe size={12} /> {story.visibility === 'anonimo' ? 'Público (Anônimo)' : 'No Acervo Público'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <h3 className="story-card-title">{story.title}</h3>
+                {story.origin && (
+                  <span className="story-origin-tag">Origem: {story.origin}</span>
+                )}
+
+                {story.audio_url && (
+                  <div className="story-audio-player">
+                    <audio controls src={story.audio_url} className="w-full" />
+                  </div>
+                )}
+
+                {story.image_url && (
+                  <div className="story-image-preview-container">
+                    <img src={story.image_url} alt={story.title} className="story-preview-img" />
+                  </div>
+                )}
+
+                {story.content && (
+                  <div className="story-notebook-sheet">
+                    <p className="story-card-content">{story.content}</p>
+                  </div>
+                )}
+
+                <div className="story-card-footer">
+                  <div className="story-meta-info">
+                    <span className="story-format-label">
+                      Formato: <strong>{story.format}</strong>
                     </span>
-                  ) : story.status === 'pendente_aprovacao' ? (
-                    <span className="vis-moderacao flex items-center gap-1" title="Em moderação antes de ir à Roda">
-                      <Sparkles size={12} /> Moderação ADM
+                    <span className="story-date">
+                      {new Date(story.created_at).toLocaleDateString('pt-BR')}
                     </span>
-                  ) : (
-                    <span className="vis-publico flex items-center gap-1" title="Público na Roda">
-                      <Globe size={12} /> {story.visibility === 'anonimo' ? 'Anônimo' : 'Público'}
-                    </span>
-                  )}
+                  </div>
+
+                  {/* Botões de Editar e Mandar para o Acervo Público */}
+                  <div className="story-card-actions">
+                    <button
+                      type="button"
+                      className="btn-story-action btn-edit-story"
+                      onClick={() => handleOpenEditModal(story)}
+                    >
+                      <Edit3 size={14} />
+                      <span>Editar</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className={`btn-story-action ${isPublic ? 'btn-public-active' : 'btn-send-public'}`}
+                      onClick={() => handleSendToPublicArchive(story)}
+                      title={isPublic ? 'Clique para tornar privado novamente' : 'Publicar na Roda de Histórias'}
+                    >
+                      {isPublic ? (
+                        <>
+                          <Check size={14} />
+                          <span>No Acervo Público</span>
+                        </>
+                      ) : (
+                        <>
+                          <Globe size={14} />
+                          <span>Mandar para o Acervo Público</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
-
-              <h3 className="story-card-title">{story.title}</h3>
-              {story.origin && (
-                <span className="story-origin-tag">Origem: {story.origin}</span>
-              )}
-
-              {/* Render por formato */}
-              {story.audio_url && (
-                <div className="story-audio-player">
-                  <audio controls src={story.audio_url} className="w-full" />
-                </div>
-              )}
-
-              {story.image_url && (
-                <div className="story-image-preview-container">
-                  <img src={story.image_url} alt={story.title} className="story-preview-img" />
-                </div>
-              )}
-
-              {story.content && (
-                <p className="story-card-content">{story.content}</p>
-              )}
-
-              <div className="story-card-footer">
-                <span className="story-format-label">
-                  Formato: <strong>{story.format}</strong>
-                </span>
-                <span className="story-date">
-                  {new Date(story.created_at).toLocaleDateString('pt-BR')}
-                </span>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </main>
 
-      {/* Modal / Sheet Mobile-First para Adicionar História */}
-      {isModalOpen && (
-        <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-sheet-card animate-fade-in" onClick={e => e.stopPropagation()}>
+      {/* Modal renderizado via Portal direto no body para nunca ficar preso ou fora de tela */}
+      {isModalOpen && createPortal(
+        <div
+          className="historias-modal-backdrop"
+          onClick={() => {
+            setIsModalOpen(false);
+            resetForm();
+          }}
+        >
+          <div className="historias-modal-card" onClick={e => e.stopPropagation()}>
             <div className="sheet-header">
-              <h2 className="sheet-title">Adicionar História</h2>
-              <button className="sheet-close-btn" onClick={() => setIsModalOpen(false)}>✕</button>
+              <h2 className="sheet-title">
+                {editingStory ? 'Editar História' : 'Escrever no Meu Caderno'}
+              </h2>
+              <button
+                type="button"
+                className="sheet-close-btn"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  resetForm();
+                }}
+              >
+                ✕
+              </button>
             </div>
 
             <form onSubmit={handleSaveStory} className="sheet-form">
+              {activeChallengePrompt && (
+                <div className="challenge-prompt-banner">
+                  <span className="challenge-banner-label">
+                    <Sparkles size={13} /> Desafio Criativo
+                  </span>
+                  <p className="challenge-banner-text">“{activeChallengePrompt}”</p>
+                </div>
+              )}
+
               {/* Seleção do Formato */}
-              <label className="sheet-label">Formato da História</label>
-              <div className="format-selector-group">
-                <button
-                  type="button"
-                  className={`format-select-btn ${formatType === 'digitado' ? 'active' : ''}`}
-                  onClick={() => setFormatType('digitado')}
-                >
-                  <FileText size={18} />
-                  <span>Digitar</span>
-                </button>
-                <button
-                  type="button"
-                  className={`format-select-btn ${formatType === 'audio' ? 'active' : ''}`}
-                  onClick={() => setFormatType('audio')}
-                >
-                  <Mic size={18} />
-                  <span>Gravar Áudio</span>
-                </button>
-                <button
-                  type="button"
-                  className={`format-select-btn ${formatType === 'escrito' ? 'active' : ''}`}
-                  onClick={() => setFormatType('escrito')}
-                >
-                  <Camera size={18} />
-                  <span>Foto Manuscrita</span>
-                </button>
+              <div>
+                <label className="sheet-label">Formato da História</label>
+                <div className="format-selector-group">
+                  <button
+                    type="button"
+                    className={`format-select-btn ${formatType === 'digitado' ? 'active' : ''}`}
+                    onClick={() => setFormatType('digitado')}
+                  >
+                    <FileText size={18} />
+                    <span>Digitar</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`format-select-btn ${formatType === 'audio' ? 'active' : ''}`}
+                    onClick={() => setFormatType('audio')}
+                  >
+                    <Mic size={18} />
+                    <span>Gravar Áudio</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`format-select-btn ${formatType === 'escrito' ? 'active' : ''}`}
+                    onClick={() => setFormatType('escrito')}
+                  >
+                    <Camera size={18} />
+                    <span>Foto Manuscrita</span>
+                  </button>
+                </div>
               </div>
 
               {/* Título */}
@@ -440,7 +621,7 @@ export default function MinhasHistorias() {
                 <label className="sheet-label">Título da História</label>
                 <input 
                   type="text" 
-                  className="sheet-input"
+                  className="sheet-input notebook-title-input"
                   placeholder="Ex: O dia em que superei o medo..."
                   value={title}
                   onChange={e => setTitle(e.target.value)}
@@ -467,13 +648,15 @@ export default function MinhasHistorias() {
                 <div className="sheet-input-group">
                   <label className="sheet-label">Gravação de Voz</label>
                   <AudioRecorder onAudioReady={handleAudioReady} onClear={() => setAudioUrl(null)} />
-                  <textarea 
-                    className="sheet-textarea mt-2"
-                    rows="3"
-                    placeholder="Descrição ou transcrição opcional do áudio..."
-                    value={content}
-                    onChange={e => setContent(e.target.value)}
-                  />
+                  <div className="notebook-paper-editor-wrap mt-2">
+                    <textarea 
+                      className="sheet-textarea notebook-lined-textarea"
+                      rows="5"
+                      placeholder="Descrição ou transcrição opcional do áudio..."
+                      value={content}
+                      onChange={e => setContent(e.target.value)}
+                    />
+                  </div>
                 </div>
               )}
 
@@ -490,7 +673,7 @@ export default function MinhasHistorias() {
                     />
                     <label htmlFor="handwritten-file-input" className="file-upload-label">
                       <Camera size={24} />
-                      <span>{imageFile ? imageFile.name : 'Tirar foto ou escolher do celular'}</span>
+                      <span>{imageFile ? imageFile.name : 'Tirar foto ou escolher do dispositivo'}</span>
                     </label>
                   </div>
                   {imageUrl && (
@@ -498,27 +681,34 @@ export default function MinhasHistorias() {
                       <img src={imageUrl} alt="Preview" className="img-preview" />
                     </div>
                   )}
-                  <textarea 
-                    className="sheet-textarea mt-2"
-                    rows="3"
-                    placeholder="Comentários sobre a escrita à mão..."
-                    value={content}
-                    onChange={e => setContent(e.target.value)}
-                  />
+                  <div className="notebook-paper-editor-wrap mt-2">
+                    <textarea 
+                      className="sheet-textarea notebook-lined-textarea"
+                      rows="5"
+                      placeholder="Comentários ou transcrição da sua escrita à mão..."
+                      value={content}
+                      onChange={e => setContent(e.target.value)}
+                    />
+                  </div>
                 </div>
               )}
 
               {formatType === 'digitado' && (
                 <div className="sheet-input-group">
-                  <label className="sheet-label">Conteúdo da História</label>
-                  <textarea 
-                    className="sheet-textarea"
-                    rows="6"
-                    placeholder="Escreva sua história aqui com todos os detalhes..."
-                    value={content}
-                    onChange={e => setContent(e.target.value)}
-                    required
-                  />
+                  <label className="sheet-label">Folha do Seu Caderno · Conteúdo da História</label>
+                  <div className="notebook-paper-editor-wrap">
+                    <div className="notebook-holes-strip" aria-hidden="true">
+                      <span /><span /><span /><span /><span /><span />
+                    </div>
+                    <textarea 
+                      className="sheet-textarea notebook-lined-textarea"
+                      rows="8"
+                      placeholder="Escreva sua história nas linhas do caderno com todos os detalhes..."
+                      value={content}
+                      onChange={e => setContent(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
               )}
 
@@ -549,7 +739,7 @@ export default function MinhasHistorias() {
                     />
                     <div>
                       <strong>Público na Roda de Histórias</strong>
-                      <p>Seu nome aparecerá como autor (passa por aprovação da moderação).</p>
+                      <p>Seu nome aparecerá como autor no acervo público da comunidade.</p>
                     </div>
                   </label>
                   <label className="vis-radio-option">
@@ -572,7 +762,10 @@ export default function MinhasHistorias() {
                 <button 
                   type="button" 
                   className="btn-text font-medium"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    resetForm();
+                  }}
                   disabled={saving}
                 >
                   Cancelar
@@ -582,12 +775,13 @@ export default function MinhasHistorias() {
                   className="btn btn-primary"
                   disabled={saving || !title.trim()}
                 >
-                  {saving ? 'Salvando...' : 'Salvar no Meu Acervo'}
+                  {saving ? 'Salvando...' : editingStory ? 'Salvar Alterações' : 'Salvar no Meu Acervo'}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

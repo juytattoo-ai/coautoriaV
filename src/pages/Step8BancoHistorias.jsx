@@ -4,6 +4,7 @@ import { ArrowLeft, Plus, CheckCircle, Globe, Lock, Share2 } from 'lucide-react'
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import AudioRecorder from '../components/AudioRecorder';
+import { VoarStepCelebration, VoarStepProgressBar, VoarBackgroundConstellation } from '../components/VoarConstellation';
 import './Step8BancoHistorias.css';
 
 const initialFormState = {
@@ -22,6 +23,7 @@ export default function Step8BancoHistorias() {
   const [stories, setStories] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const [formData, setFormData] = useState({ ...initialFormState });
   const [audioUrl, setAudioUrl] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
@@ -126,6 +128,12 @@ export default function Step8BancoHistorias() {
 
   return (
     <div className="page-container animate-fade-in">
+      {showCelebration && (
+        <VoarStepCelebration
+          stepNumber={8}
+          onContinue={() => navigate('/passo-9')}
+        />
+      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
@@ -139,7 +147,9 @@ export default function Step8BancoHistorias() {
         </div>
       </header>
 
-      <main className="step-content-wrapper">
+      <main className="step-content-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+        <VoarBackgroundConstellation />
+        <VoarStepProgressBar currentStep={8} isStepDone={stories.length >= 2} />
         <span className="step-badge">PASSO 8 DE 9</span>
         <h1 className="page-title" style={{textAlign: 'left', marginTop: '1rem'}}>Banco de Histórias Brutas</h1>
         <p className="page-subtitle" style={{textAlign: 'left', marginBottom: '2rem'}}>
@@ -299,7 +309,7 @@ export default function Step8BancoHistorias() {
               {stories.length >= 2 ? 'Banco pronto' : `Faltam ${Math.max(0, 2 - stories.length)} histórias`}
             </span>
           </div>
-          <button className="btn btn-primary" onClick={() => navigate('/passo-9')} disabled={stories.length < 2}>
+          <button className="btn btn-primary" onClick={() => setShowCelebration(true)} disabled={stories.length < 2}>
             Próximo Passo →
           </button>
         </div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Save, CheckCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { VoarStepCelebration, VoarStepProgressBar, VoarBackgroundConstellation } from '../components/VoarConstellation';
 import './Step7Proposito.css';
 
 export default function Step7Proposito() {
@@ -11,6 +12,7 @@ export default function Step7Proposito() {
   
   const [loading, setLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   
   const [formData, setFormData] = useState({
     theme: '',
@@ -105,6 +107,12 @@ export default function Step7Proposito() {
 
   return (
     <div className="page-container animate-fade-in">
+      {showCelebration && (
+        <VoarStepCelebration
+          stepNumber={7}
+          onContinue={() => navigate('/passo-8')}
+        />
+      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
@@ -118,7 +126,9 @@ export default function Step7Proposito() {
         </div>
       </header>
 
-      <main className="step-content-wrapper">
+      <main className="step-content-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+        <VoarBackgroundConstellation />
+        <VoarStepProgressBar currentStep={7} isStepDone={isComplete && isSaved} />
         <span className="step-badge">PASSO 7 DE 9</span>
         <h1 className="page-title" style={{textAlign: 'left', marginTop: '1rem'}}>Declaração de Propósito</h1>
         <p className="page-subtitle" style={{textAlign: 'left', marginBottom: '3rem'}}>
@@ -281,7 +291,7 @@ export default function Step7Proposito() {
             </button>
             <button 
               className="btn btn-primary" 
-              onClick={() => navigate('/passo-8')}
+              onClick={() => setShowCelebration(true)}
               disabled={!isSaved}
             >
               Próximo Passo →

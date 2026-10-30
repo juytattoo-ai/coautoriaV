@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Award, Star, Target, Database, MessageCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { VoarConstellationSvg } from '../components/VoarConstellation';
 import './Conclusao.css';
 
 export default function Conclusao() {
@@ -76,8 +77,11 @@ export default function Conclusao() {
       <main className="conclusion-wrapper">
         
         <div className="conclusion-header text-center mb-12">
-          <div className="award-icon-wrapper mb-6">
-            <Award size={64} className="text-primary mx-auto" />
+          <div className="conclusion-constellation-showcase">
+            <VoarConstellationSvg completedStep={9} mode="full" />
+            <span className="conclusion-constellation-caption">
+              V de VOAR · 9 Estrelas Conectadas
+            </span>
           </div>
           <h1 className="conclusion-title">Parabéns, {user?.user_metadata?.full_name?.split(' ')[0] || 'Contador(a) de Histórias'}!</h1>
           <p className="conclusion-subtitle">
@@ -137,48 +141,46 @@ export default function Conclusao() {
         </div>
 
         {/* Competências Desenvolvidas no Módulo VOZ (Considerações Vitor) */}
-        <section className="mt-12 p-6" style={{ backgroundColor: 'var(--bg-color-light)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', textAlign: 'left', boxShadow: 'var(--shadow-sm)' }}>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+        <section className="conclusion-section-card">
+          <h2 className="conclusion-section-heading">
             Competências Desenvolvidas no Módulo VOZ
           </h2>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+          <p className="conclusion-section-lead">
             Ao concluir os 9 passos, você desenvolveu habilidades fundamentais para qualquer autor(a) que deseja escrever com verdade e profundidade:
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
-            <div style={{ padding: '0.875rem', backgroundColor: 'var(--bg-color-tint)', borderLeft: '3px solid var(--primary-color)', borderRadius: 'var(--radius-xs)', fontSize: '0.85rem', lineHeight: '1.5' }}>
-              <strong style={{ color: 'var(--text-primary)' }}>1. Autoconsciência & Pacificação:</strong><br/>
-              Capacidade de revisitar feridas, picos e vales do passado sem vitimismo, encontrando significado e compaixão no que viveu.
+          <div className="conclusion-competencies-grid">
+            <div className="conclusion-competency-item">
+              <strong>1. Autoconsciência & Pacificação:</strong>
+              <span>Capacidade de revisitar feridas, picos e vales do passado sem vitimismo, encontrando significado e compaixão no que viveu.</span>
             </div>
-            <div style={{ padding: '0.875rem', backgroundColor: 'var(--bg-color-tint)', borderLeft: '3px solid var(--primary-color)', borderRadius: 'var(--radius-xs)', fontSize: '0.85rem', lineHeight: '1.5' }}>
-              <strong style={{ color: 'var(--text-primary)' }}>2. Bússola Moral & Valores Virtuosos:</strong><br/>
-              Clareza sobre os 7 princípios inegociáveis que norteiam suas decisões e dão peso ético à sua escrita.
+            <div className="conclusion-competency-item">
+              <strong>2. Bússola Moral & Valores Virtuosos:</strong>
+              <span>Clareza sobre os 7 princípios inegociáveis que norteiam suas decisões e dão peso ético à sua escrita.</span>
             </div>
-            <div style={{ padding: '0.875rem', backgroundColor: 'var(--bg-color-tint)', borderLeft: '3px solid var(--primary-color)', borderRadius: 'var(--radius-xs)', fontSize: '0.85rem', lineHeight: '1.5' }}>
-              <strong style={{ color: 'var(--text-primary)' }}>3. Arqueologia Narrativa em 4 Atos:</strong><br/>
-              Compreensão da sua biografia dividida em Raízes, Descobertas, Transições e Presente.
+            <div className="conclusion-competency-item">
+              <strong>3. Arqueologia Narrativa em 4 Atos:</strong>
+              <span>Compreensão da sua biografia dividida em Raízes, Descobertas, Transições e Presente.</span>
             </div>
-            <div style={{ padding: '0.875rem', backgroundColor: 'var(--bg-color-tint)', borderLeft: '3px solid var(--primary-color)', borderRadius: 'var(--radius-xs)', fontSize: '0.85rem', lineHeight: '1.5' }}>
-              <strong style={{ color: 'var(--text-primary)' }}>4. Propósito & Fio Condutor:</strong><br/>
-              Definição cristalina do seu Grande Tema e da Mensagem que transforma o público ou leitor.
+            <div className="conclusion-competency-item">
+              <strong>4. Propósito & Fio Condutor:</strong>
+              <span>Definição cristalina do seu Grande Tema e da Mensagem que transforma o público ou leitor.</span>
             </div>
           </div>
         </section>
 
         {/* Preparação para o Módulo ORQUESTRAÇÃO */}
-        <section className="mt-8 p-6" style={{ backgroundColor: 'var(--bg-color-tint)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', textAlign: 'left' }}>
-          <div className="flex items-center gap-2 mb-2">
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--primary-color)' }}>
-              Próximo Horizonte da Metodologia V.O.A.R.
-            </span>
+        <section className="conclusion-section-card conclusion-next-module-card">
+          <div className="conclusion-next-eyebrow">
+            Próximo Horizonte da Metodologia V.O.A.R.
           </div>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+          <h2 className="conclusion-section-heading">
             Preparando-se para o Módulo O · ORQUESTRAÇÃO
           </h2>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '1.25rem' }}>
+          <p className="conclusion-section-lead">
             Agora que você encontrou a sua <strong>Voz</strong> e possui a matéria-prima em mãos, o próximo passo é aprender a <strong>orquestrar</strong> esse material. No Módulo <strong>ORQUESTRAÇÃO</strong>, você aprenderá a tecer arcos dramáticos, definir capítulos, controlar o ritmo da leitura e estruturar uma obra completa (seja um livro, biografia, palestra ou série de ensaios).
           </p>
-          <div className="flex flex-wrap gap-4 items-center">
+          <div className="conclusion-next-actions">
             <button className="btn btn-primary" onClick={() => navigate('/voar')}>
               Ver Trilha V.O.A.R. Completa →
             </button>
@@ -188,9 +190,9 @@ export default function Conclusao() {
           </div>
         </section>
 
-        <div className="text-center mt-12 mb-8">
+        <div className="conclusion-footer-block">
           <p className="final-quote">"Minha história importa. Minha voz importa. E eu vou compartilhá-la."</p>
-          <button className="btn btn-outline mt-6" onClick={() => navigate('/')}>
+          <button className="btn btn-outline conclusion-home-btn" onClick={() => navigate('/')}>
             Voltar ao Início
           </button>
         </div>

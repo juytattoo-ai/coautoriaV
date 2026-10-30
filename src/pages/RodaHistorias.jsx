@@ -108,8 +108,23 @@ export default function RodaHistorias() {
         remoteStories = data;
       }
 
+      // Buscar também histórias públicas salvas localmente pelo usuário
+      let localPublicStories = [];
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith('coautoria_stories_')) {
+            const arr = JSON.parse(localStorage.getItem(k) || '[]');
+            const pub = arr.filter(s => s.visibility && s.visibility !== 'privado');
+            localPublicStories = [...localPublicStories, ...pub];
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+
       // Concatenar com dados mock de comunidade
-      const combined = [...remoteStories, ...INITIAL_PUBLIC_STORIES];
+      const combined = [...localPublicStories, ...remoteStories, ...INITIAL_PUBLIC_STORIES];
       // Remover duplicatas por id
       const unique = combined.filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
       setStories(unique);
@@ -230,13 +245,91 @@ export default function RodaHistorias() {
 
   return (
     <div className="roda-page animate-fade-in">
+      {/* Elemento gráfico minimalista de Fogueira sempre visível no fundo */}
+      <div className="roda-campfire-backdrop" aria-hidden="true">
+        <svg className="campfire-bg-svg" viewBox="0 0 1200 820" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Grandes anéis concêntricos de contação de histórias (visíveis nas laterais e ao redor dos cards) */}
+          <circle cx="600" cy="430" r="490" stroke="var(--primary-color)" strokeWidth="1.2" strokeDasharray="6 10" opacity="0.38" />
+          <circle cx="600" cy="430" r="390" stroke="var(--primary-color)" strokeWidth="1" opacity="0.32" />
+          <circle cx="600" cy="430" r="290" stroke="var(--primary-color)" strokeWidth="1.2" strokeDasharray="4 8" opacity="0.4" />
+          <circle cx="600" cy="430" r="195" stroke="var(--primary-color)" strokeWidth="1" opacity="0.36" />
+
+          {/* Linhas radiais sutis de calor da fogueira */}
+          <line x1="600" y1="430" x2="120" y2="180" stroke="var(--primary-color)" strokeWidth="0.8" strokeDasharray="3 8" opacity="0.28" />
+          <line x1="600" y1="430" x2="1080" y2="180" stroke="var(--primary-color)" strokeWidth="0.8" strokeDasharray="3 8" opacity="0.28" />
+          <line x1="600" y1="430" x2="90" y2="580" stroke="var(--primary-color)" strokeWidth="0.8" strokeDasharray="3 8" opacity="0.28" />
+          <line x1="600" y1="430" x2="1110" y2="580" stroke="var(--primary-color)" strokeWidth="0.8" strokeDasharray="3 8" opacity="0.28" />
+
+          {/* Fagulhas / brasas subindo pelas laterais e centro */}
+          <circle cx="565" cy="175" r="3.5" fill="var(--primary-color)" className="ember-spark spark-1" />
+          <circle cx="638" cy="145" r="3" fill="var(--primary-color)" className="ember-spark spark-2" />
+          <circle cx="600" cy="115" r="2.5" fill="var(--primary-color)" className="ember-spark spark-3" />
+          <circle cx="205" cy="310" r="3.5" fill="var(--primary-color)" opacity="0.45" />
+          <circle cx="995" cy="310" r="3.5" fill="var(--primary-color)" opacity="0.45" />
+          <circle cx="155" cy="495" r="4" fill="var(--primary-color)" opacity="0.4" />
+          <circle cx="1045" cy="495" r="4" fill="var(--primary-color)" opacity="0.4" />
+
+          {/* Fogueira central grande em traço minimalista (estilo linhas de caderno) */}
+          <g className="campfire-bg-centerpiece">
+            {/* Chamas grandes */}
+            <path
+              className="campfire-flame-outer"
+              d="M600 195 C655 275, 705 335, 672 412 C650 458, 550 458, 528 412 C495 335, 545 275, 600 195 Z"
+              stroke="var(--primary-color)"
+              strokeWidth="2.2"
+              fill="rgba(184, 74, 32, 0.06)"
+              opacity="0.65"
+            />
+            <path
+              className="campfire-flame-inner"
+              d="M600 255 C636 308, 664 352, 642 405 C626 436, 574 436, 558 405 C536 352, 564 308, 600 255 Z"
+              stroke="var(--primary-color)"
+              strokeWidth="1.7"
+              fill="rgba(184, 74, 32, 0.08)"
+              opacity="0.6"
+            />
+            <path
+              d="M600 315 C620 345, 632 372, 620 402 C612 418, 588 418, 580 402 C568 372, 580 345, 600 315 Z"
+              stroke="var(--primary-color)"
+              strokeWidth="1.3"
+              opacity="0.55"
+            />
+
+            {/* Toras de lenha cruzadas */}
+            <line x1="485" y1="490" x2="715" y2="432" stroke="var(--primary-color)" strokeWidth="2.6" strokeLinecap="round" opacity="0.6" />
+            <line x1="485" y1="432" x2="715" y2="490" stroke="var(--primary-color)" strokeWidth="2.6" strokeLinecap="round" opacity="0.6" />
+            <line x1="450" y1="506" x2="750" y2="506" stroke="var(--primary-color)" strokeWidth="1.5" strokeDasharray="6 8" opacity="0.45" />
+          </g>
+
+          {/* Duas pequenas fogueiras / lanternas nas laterais para aparecerem sempre fora dos cards */}
+          <g opacity="0.52">
+            <path
+              d="M145 355 C162 380, 175 398, 165 422 C158 436, 132 436, 125 422 C115 398, 128 380, 145 355 Z"
+              stroke="var(--primary-color)"
+              strokeWidth="1.5"
+            />
+            <line x1="115" y1="446" x2="175" y2="430" stroke="var(--primary-color)" strokeWidth="1.8" strokeLinecap="round" />
+            <line x1="115" y1="430" x2="175" y2="446" stroke="var(--primary-color)" strokeWidth="1.8" strokeLinecap="round" />
+          </g>
+          <g opacity="0.52">
+            <path
+              d="M1055 355 C1072 380, 1085 398, 1075 422 C1068 436, 1042 436, 1035 422 C1025 398, 1038 380, 1055 355 Z"
+              stroke="var(--primary-color)"
+              strokeWidth="1.5"
+            />
+            <line x1="1025" y1="446" x2="1085" y2="430" stroke="var(--primary-color)" strokeWidth="1.8" strokeLinecap="round" />
+            <line x1="1025" y1="430" x2="1085" y2="446" stroke="var(--primary-color)" strokeWidth="1.8" strokeLinecap="round" />
+          </g>
+        </svg>
+      </div>
+
       <header className="roda-header">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <span className="page-tag">COMUNIDADE COAUTORIA</span>
+            <span className="page-tag">COMUNIDADE COAUTORIA · EM VOLTA DA FOGUEIRA</span>
             <h1 className="page-heading">Roda de Histórias</h1>
             <p className="page-sub">
-              Compartilhe suas histórias com o mundo! Conecte-se com relatos reais e inspiradores.
+              Aqueça-se na roda e compartilhe suas histórias com o mundo. Conecte-se com relatos reais e inspiradores.
             </p>
           </div>
 

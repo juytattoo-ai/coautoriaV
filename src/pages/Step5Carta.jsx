@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Edit3, Mail, Camera, UploadCloud, CheckCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { VoarStepCelebration, VoarStepProgressBar, VoarBackgroundConstellation } from '../components/VoarConstellation';
 import './Step5Carta.css';
 
 export default function Step5Carta() {
@@ -13,6 +14,7 @@ export default function Step5Carta() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleFileSelect = (e) => {
@@ -73,6 +75,12 @@ export default function Step5Carta() {
 
   return (
     <div className="page-container animate-fade-in">
+      {showCelebration && (
+        <VoarStepCelebration
+          stepNumber={5}
+          onContinue={() => navigate('/passo-6')}
+        />
+      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
@@ -86,7 +94,9 @@ export default function Step5Carta() {
         </div>
       </header>
 
-      <main className="step-content-wrapper">
+      <main className="step-content-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+        <VoarBackgroundConstellation />
+        <VoarStepProgressBar currentStep={5} isStepDone={isSaved} />
         <span className="step-badge">PASSO 5 DE 9</span>
         <h1 className="page-title" style={{textAlign: 'left', marginTop: '1rem'}}>Carta ao Meu Eu do Passado</h1>
         <p className="page-subtitle" style={{textAlign: 'left', marginBottom: '2rem'}}>
@@ -177,7 +187,7 @@ export default function Step5Carta() {
 
         {/* Footer Navigation */}
         <div className="flex justify-end mt-8">
-          <button className="btn btn-primary" onClick={() => navigate('/passo-6')}>
+          <button className="btn btn-primary" onClick={() => setShowCelebration(true)}>
             Próximo Passo →
           </button>
         </div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, Heart, PenTool, LogOut } from 'lucide-react';
 import TriggerWarning from '../components/TriggerWarning';
 import AuthForm from '../components/AuthForm';
+import { VoarStepCelebration, VoarStepProgressBar, VoarBackgroundConstellation } from '../components/VoarConstellation';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import './Step1Convite.css';
@@ -19,6 +20,7 @@ export default function Step1Convite() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [isCommitted, setIsCommitted] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   
   const [selectedValues, setSelectedValues] = useState([]);
   const [reflections, setReflections] = useState({
@@ -121,7 +123,8 @@ export default function Step1Convite() {
   const isComplete = selectedValues.length === 7 && Object.values(reflections).every(val => val.trim().length > 0) && isCommitted;
 
   const handleNextStep = async () => {
-    navigate('/passo-2');
+    await handleSaveData();
+    setShowCelebration(true);
   };
 
   const handleLogout = async () => {
@@ -130,6 +133,12 @@ export default function Step1Convite() {
 
   return (
     <div className="page-container animate-fade-in">
+      {showCelebration && (
+        <VoarStepCelebration
+          stepNumber={1}
+          onContinue={() => navigate('/passo-2')}
+        />
+      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
@@ -144,7 +153,9 @@ export default function Step1Convite() {
         )}
       </header>
 
-      <main className="step-content-wrapper">
+      <main className="step-content-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+        <VoarBackgroundConstellation />
+        <VoarStepProgressBar currentStep={1} isStepDone={isComplete} />
         <span className="step-badge">PASSO 1 DE 9</span>
         <h1 className="page-title" style={{textAlign: 'left', marginTop: '1rem'}}>O Convite</h1>
         

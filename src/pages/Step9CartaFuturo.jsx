@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Edit3, Camera, UploadCloud, CheckCircle, CheckSquare } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { VoarStepCelebration, VoarStepProgressBar, VoarBackgroundConstellation } from '../components/VoarConstellation';
 import './Step9CartaFuturo.css';
 
 const CHECKLIST_ITEMS = [
@@ -21,6 +22,7 @@ export default function Step9CartaFuturo() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const [checklist, setChecklist] = useState({
     theme: false,
     purpose: false,
@@ -119,7 +121,7 @@ export default function Step9CartaFuturo() {
       if (dbError) throw dbError;
 
       setIsSaved(true);
-      navigate('/conclusao');
+      setShowCelebration(true);
 
     } catch (err) {
       alert("Erro ao salvar. Verifique se a tabela 'future_letters' existe no Supabase.");
@@ -133,6 +135,12 @@ export default function Step9CartaFuturo() {
 
   return (
     <div className="page-container animate-fade-in">
+      {showCelebration && (
+        <VoarStepCelebration
+          stepNumber={9}
+          onContinue={() => navigate('/conclusao')}
+        />
+      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
@@ -146,7 +154,9 @@ export default function Step9CartaFuturo() {
         </div>
       </header>
 
-      <main className="step-content-wrapper">
+      <main className="step-content-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+        <VoarBackgroundConstellation />
+        <VoarStepProgressBar currentStep={9} isStepDone={allChecked && isSaved} />
         <span className="step-badge">PASSO 9 DE 9</span>
         <h1 className="page-title" style={{textAlign: 'left', marginTop: '1rem'}}>Carta ao Futuro Contador de Histórias</h1>
         <p className="page-subtitle" style={{textAlign: 'left', marginBottom: '2rem'}}>

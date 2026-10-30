@@ -1,8 +1,9 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import AppLayout from './components/AppLayout';
+import Onboarding from './components/Onboarding';
 import Hub from './pages/Hub';
 import MetodoVoar from './pages/MetodoVoar';
 import MinhasHistorias from './pages/MinhasHistorias';
@@ -25,15 +26,49 @@ import Step9CartaFuturo from './pages/Step9CartaFuturo';
 import Conclusao from './pages/Conclusao';
 import TermosDeUso from './pages/TermosDeUso';
 
-function App() {
+function AppContent() {
+  const { user } = useAuth();
+  const [guestDismissed, setGuestDismissed] = useState(false);
+  const [manualReplay, setManualReplay] = useState(false);
+
+  // Sempre que o usuário conectar a conta, garante que o onboarding automático não apareça.
+  // Se desconectar depois, volta a exibir para visitante deslogado.
+  useEffect(() => {
+    if (user) {
+      setGuestDismissed(true);
+    } else {
+      setGuestDismissed(false);
+    }
+  }, [user]);
+
+  const showOnboarding = (!user && !guestDismissed) || manualReplay;
+
+  const handleCompleteOnboarding = () => {
+    setGuestDismissed(true);
+    setManualReplay(false);
+  };
+
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <AppLayout>
-          <Routes>
-            {/* Hub Inicial */}
-            <Route path="/" element={<Hub />} />
+    <>
+      {showOnboarding && (
+        <Onboarding onComplete={handleCompleteOnboarding} />
+      )}
+      <AppLayout>
+        <Routes>
+          {/* Rota /onboarding */}
+          <Route
+            path="/onboarding"
+            element={
+              user && !manualReplay ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Onboarding onComplete={handleCompleteOnboarding} />
+              )
+            }
+          />
+
+          {/* Hub Inicial */}
+          <Route path="/" element={<Hub />} />
 
             {/* Módulos & Recursos Principais */}
             <Route path="/voar" element={<MetodoVoar />} />
@@ -41,7 +76,7 @@ function App() {
             <Route path="/minhas-historias" element={<MinhasHistorias />} />
             <Route path="/roda-de-historias" element={<RodaHistorias />} />
             <Route path="/novidades" element={<Novidades />} />
-            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/perfil" element={<Perfil onReplayOnboarding={() => setManualReplay(true)} />} />
 
             {/* Passos do Módulo Voz protegidos sequencialmente */}
             <Route path="/passo-1" element={<Step1Convite />} />
@@ -120,8 +155,18 @@ function App() {
             <Route path="/termos" element={<TermosDeUso />} />
           </Routes>
         </AppLayout>
-      </BrowserRouter>
-    </AuthProvider>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
