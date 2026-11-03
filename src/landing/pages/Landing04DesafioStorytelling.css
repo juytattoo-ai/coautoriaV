@@ -1,0 +1,1089 @@
+/* ==========================================================================
+   LANDING PAGE 04 — FIEL AO DESIGN DA IMAGEM ANEXADA
+   "Você consegue contar essa história?"
+   - Porta aberta em degraus de pedra com céu laranja e pistas flutuantes (?, E se...?, *)
+   - Faixa central areia (#f2e4d3) com papel rasgado datilografado + fita laranja
+   - Cartão de escolhas interativo com rádio laranja e revelação em tempo real
+   - Seção inferior com arco laranja, foto de nuvens e cartão rasgado "* CoAutoria"
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Courier+Prime:wght@400;700&display=swap');
+
+.lp-theme-lp04 {
+  background-color: #f8f1e7;
+  color: #1e1c1a;
+}
+
+[data-theme="dark"] .lp-theme-lp04 {
+  background-color: #141312;
+  color: #f4efe6;
+}
+
+.lp04-concept-eyebrow {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #eb6b24;
+  margin-bottom: 0.9rem;
+}
+
+/* Botões estilo pílula arredondada laranja (idênticos ao mockup da LP 04) */
+.lp04-pill-btn,
+.lp04-rounded-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  background: linear-gradient(180deg, #f27a30 0%, #e55e16 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0.95rem 1.85rem !important;
+  font-family: var(--font-sans);
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+  box-shadow: 0 8px 20px rgba(235, 107, 36, 0.28);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  text-decoration: none;
+}
+
+.lp04-pill-btn:hover,
+.lp04-rounded-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(235, 107, 36, 0.38);
+}
+
+.lp04-rounded-cta .lp-cta-dot {
+  display: none;
+}
+
+/* ==========================================================================
+   1. HERO — PORTA ABERTA NOS DEGRAUS + PISTAS FLUTUANTES
+   ========================================================================== */
+.lp04-hero {
+  padding: 2rem 0 4.5rem;
+}
+
+.lp04-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 960px) {
+  .lp04-hero-grid {
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 2.5rem;
+  }
+}
+
+.lp04-hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.85rem, 5.4vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin-bottom: 1.65rem;
+}
+
+.lp04-underlined-word {
+  position: relative;
+  display: inline-block;
+}
+
+.lp04-brush-underline {
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 92%;
+  height: 16px;
+}
+
+.lp04-hero-sub-1 {
+  font-size: 1.06rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 0.85rem;
+}
+
+.lp04-hero-sub-2 {
+  font-size: 1.02rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.lp04-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.lp04-saiba-mais-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.lp04-saiba-mais-link:hover {
+  color: #eb6b24;
+}
+
+/* --- COLAGEM DO PORTAL (Porta de madeira + Céu laranja + Degraus + Pistas) --- */
+.lp04-portal-collage {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  height: 440px;
+  margin: 0 auto;
+}
+
+@media (max-width: 540px) {
+  .lp04-portal-collage {
+    height: 370px;
+    transform: scale(0.9);
+  }
+}
+
+.lp04-portal-scribbles-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Pistas flutuantes ao redor da porta */
+.lp04-clue-card {
+  position: absolute;
+  background-color: #efe2cf;
+  color: #1e1c1a;
+  box-shadow: 0 10px 24px rgba(30, 25, 20, 0.14);
+  z-index: 4;
+}
+
+/* Pista 1: "?" à esquerda */
+.clue-question-mark {
+  top: 96px;
+  left: 34px;
+  width: 96px;
+  height: 112px;
+  transform: rotate(-14deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 4rem;
+  font-weight: 700;
+  clip-path: polygon(0% 4%, 96% 0%, 100% 94%, 6% 100%);
+}
+
+/* Pista 2: Papel com espiral na base esquerda */
+.clue-spiral-paper {
+  bottom: 32px;
+  left: 16px;
+  width: 145px;
+  height: 92px;
+  transform: rotate(-10deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: polygon(3% 0%, 98% 6%, 94% 96%, 0% 92%);
+}
+
+.lp04-spiral-svg {
+  width: 85%;
+  height: 85%;
+}
+
+/* Pista 3: Foto sépia da árvore à direita */
+.clue-tree-photo {
+  top: 42px;
+  right: 28px;
+  width: 122px;
+  height: 92px;
+  transform: rotate(6deg);
+  overflow: hidden;
+  border: 3px solid #efe2cf;
+}
+
+.clue-tree-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(55%) contrast(1.1);
+}
+
+/* Pista 4: "E se...?" datilografado */
+.clue-what-if {
+  top: 148px;
+  right: 8px;
+  padding: 1rem 1.35rem;
+  transform: rotate(-11deg);
+  font-family: 'Courier Prime', monospace;
+  font-size: 1.35rem;
+  background-color: #f4eadb;
+}
+
+.lp04-portal-black-asterisk {
+  position: absolute;
+  bottom: 84px;
+  right: 22px;
+  font-family: var(--font-sans);
+  font-size: 4.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-primary);
+  z-index: 5;
+}
+
+/* Estrutura Central: Porta Aberta + Céu Laranja + Escada */
+.lp04-doorway-monument {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+}
+
+.lp04-door-outer-frame {
+  position: relative;
+  width: 156px;
+  height: 245px;
+  background-color: #2b1d12;
+  padding: 8px 8px 0 8px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+}
+
+.lp04-door-orange-sky {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #e95915 0%, #f5882e 60%, #fbd08c 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.lp04-sky-clouds {
+  position: absolute;
+  bottom: 18px;
+  right: -12px;
+  width: 95px;
+  height: 65px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 225, 175, 0.7) 0%, transparent 70%);
+}
+
+/* Folha da porta aberta para a esquerda */
+.lp04-wooden-door-leaf {
+  position: absolute;
+  top: -8px;
+  left: -58px;
+  width: 74px;
+  height: 248px;
+  background: linear-gradient(90deg, #4b311d 0%, #6d482b 100%);
+  border: 2px solid #2b1d12;
+  transform: skewY(8deg);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: -10px 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.lp04-door-panel-top,
+.lp04-door-panel-bottom {
+  flex: 1;
+  border: 2px solid rgba(35, 20, 10, 0.55);
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.lp04-door-handle {
+  position: absolute;
+  top: 52%;
+  right: 6px;
+  width: 10px;
+  height: 4px;
+  background-color: #d4af37;
+  border-radius: 2px;
+}
+
+/* Degraus de pedra */
+.lp04-stone-steps {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lp04-step {
+  height: 18px;
+  background: linear-gradient(180deg, #8c7a68 0%, #4a3f35 100%);
+  border-top: 2px solid #b5a492;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.lp04-step.step-1 {
+  width: 184px;
+}
+.lp04-step.step-2 {
+  width: 224px;
+}
+.lp04-step.step-3 {
+  width: 268px;
+}
+.lp04-step.step-4 {
+  width: 312px;
+}
+
+/* ==========================================================================
+   2. EXPERIÊNCIA INTERATIVA (Faixa Central Areia #f2e4d3)
+   ========================================================================== */
+.lp04-challenge-band {
+  background-color: #f2e4d3;
+  padding: 4.5rem 0 5rem;
+  border-top: 1px solid rgba(30, 28, 26, 0.07);
+  border-bottom: 1px solid rgba(30, 28, 26, 0.07);
+}
+
+[data-theme="dark"] .lp04-challenge-band {
+  background-color: #1b1917;
+}
+
+.lp04-challenge-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .lp04-challenge-grid {
+    grid-template-columns: 0.96fr 1.04fr;
+    gap: 3.5rem;
+  }
+}
+
+.lp04-interactive-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.38rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(30, 28, 26, 0.3);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+[data-theme="dark"] .lp04-interactive-pill-badge {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.lp04-badge-orange-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #eb6b24;
+}
+
+.lp04-challenge-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.08;
+  margin-bottom: 1rem;
+}
+
+.lp04-challenge-lead {
+  font-size: 0.98rem;
+  line-height: 1.58;
+  color: var(--text-secondary);
+  margin-bottom: 1.35rem;
+  max-width: 460px;
+}
+
+/* Abas das 4 pistas */
+.lp04-question-stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.lp04-stepper-DotBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.32rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(30, 28, 26, 0.18);
+  background-color: rgba(255, 255, 255, 0.5);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #1e1c1a;
+  transition: all 0.18s ease;
+}
+
+.lp04-stepper-DotBtn.active {
+  background-color: #eb6b24;
+  border-color: #eb6b24;
+  color: #ffffff;
+}
+
+.lp04-stepper-DotBtn.done:not(.active) {
+  border-color: #eb6b24;
+  color: #eb6b24;
+}
+
+/* Cartão Bege Arredondado das Opções (Idêntico ao Mockup) */
+.lp04-options-card {
+  background-color: #ead7c0;
+  border-radius: 16px;
+  padding: 1.65rem 1.5rem;
+  box-shadow: 0 8px 24px rgba(30, 25, 20, 0.06);
+}
+
+[data-theme="dark"] .lp04-options-card {
+  background-color: #24211e;
+}
+
+.lp04-options-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+
+.lp04-options-question-title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.lp04-options-counter {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #eb6b24;
+}
+
+.lp04-radio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.lp04-radio-pill {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.78rem 1rem;
+  background-color: #f7efe5;
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  text-align: left;
+  transition: all 0.18s ease;
+}
+
+[data-theme="dark"] .lp04-radio-pill {
+  background-color: #181614;
+  color: #f4efe6;
+}
+
+.lp04-radio-pill:hover {
+  border-color: rgba(235, 107, 36, 0.45);
+}
+
+.lp04-radio-pill.selected {
+  background-color: #fbf6f0;
+  border-color: #eb6b24;
+  box-shadow: 0 4px 12px rgba(235, 107, 36, 0.12);
+}
+
+[data-theme="dark"] .lp04-radio-pill.selected {
+  background-color: #2d2620;
+}
+
+.lp04-radio-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #d5c5b3;
+  background-color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+
+.lp04-radio-circle.checked {
+  border-color: #eb6b24;
+  background-color: #eb6b24;
+  box-shadow: 0 0 0 3px rgba(235, 107, 36, 0.25);
+}
+
+.lp04-radio-inner-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ffffff;
+}
+
+.lp04-radio-label {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.lp04-custom-input-box {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.lp04-custom-text-input {
+  flex: 1;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.86rem;
+  border-radius: 8px !important;
+}
+
+.lp04-next-mini-btn {
+  background-color: #eb6b24;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.lp04-options-footer-nav {
+  margin-top: 1.15rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(30, 28, 26, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lp04-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.lp04-reset-btn:hover {
+  color: #eb6b24;
+}
+
+.lp04-advance-link {
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #eb6b24;
+}
+
+/* --- COLUNA DIREITA DO DESAFIO: PAPEL RASGADO DATILOGRAFADO + FOTO DA MESA --- */
+.lp04-challenge-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.lp04-torn-typewriter-paper {
+  position: relative;
+  background-color: #efe2d1;
+  color: #1e1c1a;
+  padding: 2.35rem 2.25rem 2rem;
+  box-shadow: 0 12px 28px rgba(30, 25, 20, 0.08);
+  clip-path: polygon(
+    1% 2%,
+    98% 0%,
+    100% 93%,
+    94% 98%,
+    78% 95%,
+    62% 99%,
+    42% 95%,
+    22% 100%,
+    6% 96%,
+    0% 92%
+  );
+}
+
+/* Fita adesiva laranja translúcida */
+.lp04-orange-tape {
+  position: absolute;
+  width: 96px;
+  height: 28px;
+  background-color: rgba(242, 118, 34, 0.88);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.tape-top-right {
+  top: -6px;
+  right: 68px;
+  transform: rotate(12deg);
+}
+
+.tape-photo {
+  top: -10px;
+  right: 28px;
+  width: 78px;
+  height: 22px;
+  transform: rotate(10deg);
+  z-index: 3;
+}
+
+.lp04-typewriter-text {
+  font-family: 'Courier Prime', monospace;
+  font-size: clamp(1rem, 1.55vw, 1.16rem);
+  line-height: 1.52;
+  color: #1e1c1a;
+  margin-bottom: 1.15rem;
+}
+
+.lp04-paper-orange-scribble {
+  display: block;
+  width: 140px;
+  height: 22px;
+  margin-left: auto;
+}
+
+/* Linha inferior: Nota manuscrita + Foto da mesa */
+.lp04-clue-photo-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+@media (min-width: 560px) {
+  .lp04-clue-photo-row {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+}
+
+.lp04-handwritten-callout {
+  position: relative;
+  padding-left: 0.5rem;
+}
+
+.lp04-handwritten-text {
+  font-family: 'Caveat', var(--font-serif);
+  font-size: 1.65rem;
+  line-height: 1.18;
+  color: var(--text-primary);
+  transform: rotate(-6deg);
+  margin-bottom: 0.35rem;
+}
+
+.lp04-hand-arrow {
+  width: 64px;
+  height: 32px;
+  display: block;
+  margin-left: 45%;
+}
+
+.lp04-live-angle-caption {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #eb6b24;
+  line-height: 1.45;
+}
+
+.lp04-table-letter-frame {
+  position: relative;
+  background-color: #efe2cf;
+  padding: 6px;
+  border-radius: 4px;
+  transform: rotate(3.5deg);
+  box-shadow: 0 14px 32px rgba(30, 25, 20, 0.16);
+}
+
+.lp04-table-letter-frame img {
+  width: 100%;
+  height: 185px;
+  object-fit: cover;
+  display: block;
+  filter: sepia(45%) contrast(1.06);
+}
+
+/* ==========================================================================
+   3. REVELAÇÃO — SUA INTERPRETAÇÃO É PARTE DA HISTÓRIA
+   ========================================================================== */
+.lp04-revelation-card {
+  margin-top: 3rem;
+  background-color: #fbf6ee;
+  border: 1.5px solid rgba(235, 107, 36, 0.38);
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 12px 30px rgba(30, 25, 20, 0.06);
+  transition: all 0.35s ease;
+}
+
+[data-theme="dark"] .lp04-revelation-card {
+  background-color: #221f1c;
+}
+
+.lp04-revelation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.lp04-revelation-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #eb6b24;
+}
+
+.lp04-reset-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: 1px solid rgba(235, 107, 36, 0.35);
+  color: #eb6b24;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.lp04-assembled-story {
+  font-family: 'Courier Prime', monospace;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  padding: 1.15rem 1.35rem;
+  background-color: #f2e4d3;
+  color: #1e1c1a;
+  border-left: 3px solid #eb6b24;
+  border-radius: 6px;
+  margin-bottom: 1.35rem;
+}
+
+.lp04-revelation-title {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  margin-bottom: 0.45rem;
+}
+
+.lp04-revelation-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   4. CONEXÃO COM O COAUTORIA (Fiel à parte inferior da imagem anexada)
+   ========================================================================== */
+.lp04-connection-section {
+  padding: 5rem 0 6rem;
+}
+
+.lp04-connection-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 5rem;
+}
+
+@media (min-width: 920px) {
+  .lp04-connection-grid {
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 3.5rem;
+  }
+}
+
+.lp04-connection-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.35rem, 4.6vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.06;
+  margin-bottom: 1.25rem;
+}
+
+.lp04-connection-lead {
+  font-size: 1.04rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 0.85rem;
+  max-width: 460px;
+}
+
+.lp04-connection-sub {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 1.85rem;
+  max-width: 460px;
+}
+
+/* Colagem Inferior Direita (Arco Laranja + Nuvens + Cartão "* CoAutoria") */
+.lp04-connection-collage {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 300px;
+  margin: 0 auto;
+}
+
+.lp04-orange-dome {
+  position: absolute;
+  top: 12px;
+  left: 36px;
+  width: 255px;
+  height: 185px;
+  background-color: #f27a24;
+  border-radius: 160px 160px 0 0;
+  transform: rotate(-12deg);
+  z-index: 1;
+}
+
+.lp04-left-squiggle {
+  position: absolute;
+  top: 28px;
+  left: 12px;
+  width: 105px;
+  height: 145px;
+  z-index: 3;
+}
+
+.lp04-clouds-photo-card {
+  position: absolute;
+  top: 4px;
+  right: 12px;
+  width: 195px;
+  height: 245px;
+  transform: rotate(8deg);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+  z-index: 2;
+}
+
+.lp04-clouds-photo-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(25%) contrast(1.05);
+}
+
+.lp04-brand-torn-card {
+  position: absolute;
+  bottom: 24px;
+  left: 92px;
+  right: 42px;
+  background-color: #efe2d0;
+  color: #1e1c1a;
+  padding: 2rem 1.75rem 2.25rem;
+  transform: rotate(4deg);
+  box-shadow: 0 16px 36px rgba(30, 25, 20, 0.16);
+  z-index: 4;
+  text-align: center;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 90%,
+    90% 98%,
+    75% 92%,
+    58% 100%,
+    40% 92%,
+    22% 99%,
+    8% 92%,
+    0% 96%
+  );
+}
+
+.lp04-brand-card-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.25rem;
+}
+
+.lp04-brand-star {
+  font-family: var(--font-sans);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 0.8;
+  color: #eb6b24;
+}
+
+.lp04-brand-word {
+  font-family: var(--font-serif);
+  font-size: 2.15rem;
+  font-weight: 700;
+  color: #1e1c1a;
+}
+
+.lp04-brand-tagline {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #3d3832;
+}
+
+/* ==========================================================================
+   5. OUTRAS POSSIBILIDADES + 6. CTA FINAL
+   ========================================================================== */
+.lp04-possibilities-block {
+  padding-top: 3rem;
+  border-top: 1px solid rgba(30, 28, 26, 0.1);
+  margin-bottom: 4.5rem;
+}
+
+.lp04-possibilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.lp04-possibility-card {
+  background-color: #f2e4d3;
+  color: #1e1c1a;
+  padding: 1.5rem 1.35rem;
+  border-radius: 12px;
+}
+
+[data-theme="dark"] .lp04-possibility-card {
+  background-color: #1f1d1a;
+  color: #f4efe6;
+}
+
+.lp04-possibility-num {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #eb6b24;
+  margin-bottom: 0.45rem;
+}
+
+.lp04-possibility-title {
+  font-family: var(--font-serif);
+  font-size: 1.18rem;
+  margin-bottom: 0.4rem;
+}
+
+.lp04-possibility-desc {
+  font-size: 0.86rem;
+  opacity: 0.82;
+  line-height: 1.5;
+}
+
+.lp04-final-banner {
+  background-color: #ead7c0;
+  color: #1e1c1a;
+  border-radius: 20px;
+  padding: 3.5rem 2rem;
+  text-align: center;
+}
+
+[data-theme="dark"] .lp04-final-banner {
+  background-color: #24211e;
+  color: #f4efe6;
+}
+
+.lp04-final-banner-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.9rem, 3.8vw, 2.75rem);
+  margin-bottom: 0.85rem;
+}
+
+.lp04-final-banner-text {
+  font-size: 1.02rem;
+  max-width: 540px;
+  margin: 0 auto 1.85rem;
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   OTIMIZAÇÃO MOBILE FIRST & SIMULADOR MOBILE (390px)
+   ========================================================================== */
+@container lpshell (max-width: 760px) {
+  .lp04-hero {
+    padding: 1.5rem 0 3rem;
+  }
+
+  .lp04-hero-grid,
+  .lp04-challenge-grid,
+  .lp04-connection-grid,
+  .lp04-clue-photo-row {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .lp04-hero-title {
+    font-size: 2.45rem;
+  }
+
+  .lp04-portal-collage {
+    width: 330px;
+    height: 340px;
+    transform: scale(0.84);
+    transform-origin: top center;
+    margin-bottom: -40px;
+  }
+
+  /* No mobile, coloca o papel rasgado com a cena das 22h17 antes das opções para leitura natural */
+  .lp04-challenge-right {
+    order: -1;
+  }
+
+  .lp04-torn-typewriter-paper {
+    padding: 1.85rem 1.35rem 1.5rem;
+  }
+
+  .lp04-connection-collage {
+    max-width: 335px;
+    height: 250px;
+    transform: scale(0.88);
+    transform-origin: center;
+  }
+
+  .lp04-brand-torn-card {
+    left: 48px;
+    right: 16px;
+    padding: 1.4rem 1.15rem 1.65rem;
+  }
+
+  .lp04-brand-word {
+    font-size: 1.65rem;
+  }
+
+  .lp04-possibilities-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

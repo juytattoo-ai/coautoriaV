@@ -1,0 +1,955 @@
+/* ==========================================================================
+   LANDING PAGE 03 — DESIGN 100% BASEADO NA IMAGEM 3 ("untold")
+   - Papel creme com pauta horizontal sutil de ponta a ponta (#f6f4ee)
+   - Tipografia monumental gigantesca intercalada com cards, asterisco laranja (*),
+     ilustração de porta se abrindo e pilha de rascunhos entre parênteses ( )
+   - Animações interativas de caos criativo -> organização
+   ========================================================================== */
+
+.lp-theme-lp03 {
+  background-color: #f6f4ee;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 47px,
+    rgba(24, 23, 21, 0.05) 48px
+  );
+}
+
+[data-theme="dark"] .lp-theme-lp03 {
+  background-color: #111215;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 47px,
+    rgba(255, 255, 255, 0.04) 48px
+  );
+}
+
+.lp03-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.lp03-tag {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #e25b2d;
+  margin-bottom: 0.75rem;
+}
+
+.lp03-big-h2 {
+  font-family: var(--font-sans);
+  font-size: clamp(2.1rem, 4.8vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--text-primary);
+}
+
+.lp03-big-h2 span {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: #e25b2d;
+}
+
+/* ==========================================================================
+   1. HERO — TIPOGRAFIA MONUMENTAL INTERCALADA ("we * tell untold ( ) stories")
+   ========================================================================== */
+.lp03-untold-hero {
+  position: relative;
+  padding: 1.5rem 0 4.5rem;
+  min-height: calc(100vh - 108px);
+  display: flex;
+  align-items: center;
+}
+
+.lp03-hero-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.lp03-concept-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.lp03-concept-asterisk {
+  color: #e25b2d;
+  font-weight: 700;
+}
+
+/* Quadro Monumental Central */
+.lp03-monumental-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0;
+}
+
+.lp03-m-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(0.75rem, 2vw, 1.75rem);
+  width: 100%;
+}
+
+.lp03-m-word {
+  font-family: var(--font-sans);
+  font-size: clamp(3.1rem, 8.8vw, 7.2rem);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+  color: var(--text-primary);
+}
+
+/* Inserto 1: Card vermelho/laranja com mosaico de telas de notas + Asterisco gigante * */
+.lp03-notes-grid-insert {
+  position: relative;
+  width: clamp(135px, 19vw, 225px);
+  height: clamp(84px, 12vw, 140px);
+  background-color: #b92b19;
+  border: 3px solid #e25b2d;
+  border-radius: 5px;
+  padding: 6px;
+  box-shadow: 0 14px 32px rgba(226, 91, 45, 0.24);
+  transition: transform 0.3s ease;
+}
+
+.lp03-notes-grid-insert:hover {
+  transform: scale(1.04) rotate(-2deg);
+}
+
+.lp03-mini-phones-grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 4px;
+}
+
+.lp03-mini-phone {
+  border-radius: 3px;
+  overflow: hidden;
+  background-color: #181715;
+}
+
+.lp03-mini-phone img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp03-giant-asterisk {
+  position: absolute;
+  top: -22px;
+  left: -18px;
+  font-family: var(--font-sans);
+  font-size: clamp(3.4rem, 6vw, 5.2rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #e25b2d;
+  pointer-events: none;
+}
+
+/* Inserto 2: Ilustração da porta laranja com pessoa saindo */
+.lp03-doorway-insert {
+  width: clamp(72px, 9.5vw, 112px);
+  height: clamp(92px, 12vw, 142px);
+  transition: transform 0.3s ease;
+}
+
+.lp03-doorway-insert:hover {
+  transform: translateY(-4px);
+}
+
+.lp03-doorway-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Inserto 3: Pilha de rascunhos entre parênteses gigantes ( ) */
+.lp03-paren-stack-insert {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.lp03-giant-paren {
+  font-family: var(--font-sans);
+  font-size: clamp(3.4rem, 8vw, 6.2rem);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.lp03-card-fan {
+  position: relative;
+  width: clamp(96px, 13vw, 148px);
+  height: clamp(96px, 13vw, 148px);
+}
+
+.lp03-fan-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lp03-fan-card.fan-orange {
+  background-color: #e25b2d;
+  transform: rotate(9deg) translate(4px, 2px);
+}
+
+.lp03-fan-card.fan-paper {
+  background-color: #ffffff;
+  color: #181715;
+  border: 1px solid #d4cfc4;
+  transform: rotate(-8deg) translate(-4px, -2px);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.72rem;
+}
+
+.lp03-fan-card.fan-photo {
+  object-fit: cover;
+  transform: rotate(-2deg);
+  border: 2px solid #ffffff;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.lp03-paren-stack-insert:hover .fan-orange {
+  transform: rotate(15deg) translate(10px, 4px);
+}
+
+.lp03-paren-stack-insert:hover .fan-paper {
+  transform: rotate(-14deg) translate(-10px, -4px);
+}
+
+/* Nota lateral com barra vertical — idêntica ao (*) da Imagem 3 */
+.lp03-hero-sidenote {
+  max-width: 265px;
+  padding-left: 1rem;
+  border-left: 1.5px solid var(--text-primary);
+  text-align: left;
+}
+
+.lp03-hero-sidenote p {
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.lp03-hero-sidenote strong {
+  color: #e25b2d;
+}
+
+/* Barra inferior do Hero com botão centralizado + indicador vertical à direita */
+.lp03-hero-bottom-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.lp03-scroll-indicator {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+@media (min-width: 900px) {
+  .lp03-scroll-indicator {
+    display: flex;
+  }
+}
+
+.lp03-scroll-vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-secondary);
+}
+
+.lp03-scroll-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid #e25b2d;
+  color: #e25b2d;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   2. O PROBLEMA — NOTAS SOLTAS QUE SE ORGANIZAM
+   ========================================================================== */
+.lp03-problem-section {
+  padding: 5.5rem 0;
+  border-top: 1px solid rgba(24, 23, 21, 0.1);
+}
+
+.lp03-problem-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+.lp03-toggle-order-btn {
+  background-color: transparent;
+  border: 1.5px solid #e25b2d;
+  color: #e25b2d;
+  padding: 0.55rem 1.1rem;
+  border-radius: 2px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.lp03-toggle-order-btn:hover,
+.lp03-toggle-order-btn.is-organized {
+  background-color: #e25b2d;
+  color: #ffffff;
+}
+
+.lp03-scattered-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.35rem;
+}
+
+.lp03-notepad-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(24, 23, 21, 0.15);
+  border-top: 4px solid #e25b2d;
+  padding: 1.5rem 1.35rem;
+  box-shadow: 0 10px 24px rgba(24, 23, 21, 0.06);
+  transform: rotate(var(--note-tilt, 0deg));
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease;
+}
+
+[data-theme="dark"] .lp03-notepad-card {
+  background-color: #181a20;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.lp03-notepad-card:hover,
+.lp03-scattered-notes-grid.grid-organized .lp03-notepad-card {
+  transform: rotate(0deg) translateY(-4px);
+}
+
+.lp03-notepad-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.lp03-notepad-id {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e25b2d;
+}
+
+.lp03-notepad-meta {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.lp03-notepad-text {
+  font-family: var(--font-serif);
+  font-size: 1.14rem;
+  line-height: 1.38;
+  color: var(--text-primary);
+}
+
+.lp03-problem-closing {
+  margin-top: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border: 1px dashed rgba(226, 91, 45, 0.45);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .lp03-problem-closing {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.lp03-closing-star {
+  font-family: var(--font-sans);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #e25b2d;
+  line-height: 1;
+}
+
+.lp03-closing-statement {
+  max-width: 680px;
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   3. APRESENTAÇÃO DO COAUTORIA + TRILHA V DE VOAR
+   ========================================================================== */
+.lp03-platform-section {
+  padding: 5.5rem 0;
+  border-top: 1px solid rgba(24, 23, 21, 0.1);
+}
+
+.lp03-platform-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 920px) {
+  .lp03-platform-layout {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 4rem;
+  }
+}
+
+.lp03-platform-lead {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+}
+
+.lp03-platform-cta {
+  margin-top: 2rem;
+}
+
+.lp03-voar-board {
+  background-color: #181715;
+  color: #f6f4ee;
+  padding: 2.25rem 1.85rem;
+  border-radius: 3px;
+  position: relative;
+}
+
+.lp03-voar-board-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.lp03-board-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #e25b2d;
+}
+
+.lp03-board-asterisk {
+  font-size: 2rem;
+  line-height: 0.8;
+  color: #e25b2d;
+  font-weight: 700;
+}
+
+.lp03-voar-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+}
+
+@media (max-width: 480px) {
+  .lp03-voar-chips-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.lp03-voar-chip {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.lp03-voar-chip:hover {
+  border-color: #e25b2d;
+  transform: translateY(-2px);
+}
+
+.lp03-chip-num {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #e25b2d;
+}
+
+.lp03-chip-name {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   4. DO PENSAMENTO À CRIAÇÃO (Interativo Capture -> Explore -> Construa)
+   ========================================================================== */
+.lp03-creation-section {
+  padding: 5.5rem 0;
+  border-top: 1px solid rgba(24, 23, 21, 0.1);
+}
+
+.lp03-creation-header {
+  margin-bottom: 2.75rem;
+}
+
+.lp03-creation-tabs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .lp03-creation-tabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.lp03-stage-tab {
+  text-align: left;
+  padding: 1.35rem 1.5rem;
+  background-color: #ffffff;
+  border: 1px solid rgba(24, 23, 21, 0.14);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .lp03-stage-tab {
+  background-color: #181a20;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.lp03-stage-tab.active {
+  border-color: #e25b2d;
+  border-left: 4px solid #e25b2d;
+  box-shadow: 0 10px 24px rgba(226, 91, 45, 0.12);
+}
+
+.lp03-tab-num {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #e25b2d;
+  margin-bottom: 0.35rem;
+}
+
+.lp03-stage-tab p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.lp03-transformation-canvas {
+  position: relative;
+  min-height: 230px;
+  background-color: #ffffff;
+  border: 1px solid rgba(24, 23, 21, 0.14);
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1.25rem;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .lp03-transformation-canvas {
+  background-color: #181a20;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.lp03-transform-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.lp03-t-node {
+  position: relative;
+  z-index: 2;
+  background-color: #f6f4ee;
+  border: 1px solid rgba(24, 23, 21, 0.2);
+  padding: 1rem 1.25rem;
+  max-width: 230px;
+  transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="dark"] .lp03-t-node {
+  background-color: #111215;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.stage-capture .node-a {
+  transform: rotate(-6deg) translateY(8px);
+}
+.stage-capture .node-b {
+  transform: rotate(5deg) translateY(-10px);
+}
+.stage-capture .node-c {
+  transform: rotate(-4deg) translateY(6px);
+}
+
+.stage-explore .lp03-t-node {
+  transform: rotate(0deg);
+  border-color: #e25b2d;
+}
+
+.stage-construa .node-c {
+  background-color: #e25b2d;
+  border-color: #e25b2d;
+  color: #ffffff;
+  transform: scale(1.06);
+}
+
+.lp03-node-tag {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #e25b2d;
+  margin-bottom: 0.3rem;
+}
+
+.stage-construa .node-c .lp03-node-tag {
+  color: #ffffff;
+}
+
+.lp03-t-node strong {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+/* ==========================================================================
+   5. UM ESPAÇO QUE ACOMPANHA SUAS IDEIAS
+   ========================================================================== */
+.lp03-library-section {
+  padding: 5.5rem 0;
+  border-top: 1px solid rgba(24, 23, 21, 0.1);
+}
+
+.lp03-library-header {
+  margin-bottom: 2.75rem;
+}
+
+.lp03-library-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+  gap: 1.25rem;
+}
+
+.lp03-library-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(24, 23, 21, 0.14);
+  padding: 1.65rem 1.5rem;
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+
+[data-theme="dark"] .lp03-library-card {
+  background-color: #181a20;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.lp03-library-card:hover {
+  transform: translateY(-4px);
+  border-color: #e25b2d;
+}
+
+.lp03-library-code {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #e25b2d;
+  margin-bottom: 0.65rem;
+}
+
+.lp03-library-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  margin-bottom: 0.45rem;
+}
+
+.lp03-library-snippet {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* ==========================================================================
+   6. PARA QUEM É O COAUTORIA?
+   ========================================================================== */
+.lp03-audience-section {
+  padding: 5.5rem 0;
+  border-top: 1px solid rgba(24, 23, 21, 0.1);
+}
+
+.lp03-audience-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.lp03-audience-note {
+  max-width: 310px;
+  padding-left: 1rem;
+  border-left: 1.5px solid var(--text-primary);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.lp03-audience-note strong {
+  color: #e25b2d;
+}
+
+.lp03-audience-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+  gap: 1.35rem;
+}
+
+.lp03-audience-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lp03-audience-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.lp03-audience-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(40%);
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.lp03-audience-card:hover .lp03-audience-img-wrap img {
+  transform: scale(1.05);
+  filter: grayscale(0%);
+}
+
+.lp03-audience-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: #e25b2d;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 7px;
+}
+
+.lp03-audience-role {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+}
+
+.lp03-audience-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   7. CTA FINAL
+   ========================================================================== */
+.lp03-final-cta {
+  padding: 6rem 0 7rem;
+  border-top: 1px solid rgba(24, 23, 21, 0.1);
+  text-align: center;
+}
+
+.lp03-final-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lp03-final-asterisk {
+  font-family: var(--font-sans);
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 0.8;
+  color: #e25b2d;
+  margin-bottom: 1rem;
+}
+
+.lp03-final-giant {
+  font-family: var(--font-sans);
+  font-size: clamp(2.25rem, 5.2vw, 4.3rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin-bottom: 1.15rem;
+}
+
+.lp03-final-giant span {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: #e25b2d;
+}
+
+.lp03-final-sub {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin-bottom: 2.25rem;
+}
+
+/* ==========================================================================
+   OTIMIZAÇÃO MOBILE FIRST & SIMULADOR MOBILE (390px)
+   ========================================================================== */
+@container lpshell (max-width: 760px) {
+  .lp03-untold-hero {
+    min-height: auto;
+    padding: 1.25rem 0 3rem;
+  }
+
+  .lp03-m-word {
+    font-size: 2.75rem;
+  }
+
+  .lp03-notes-grid-insert {
+    width: 132px;
+    height: 82px;
+  }
+
+  .lp03-giant-asterisk {
+    font-size: 3rem;
+    top: -16px;
+    left: -12px;
+  }
+
+  .lp03-doorway-insert {
+    width: 68px;
+    height: 88px;
+  }
+
+  .lp03-giant-paren {
+    font-size: 3.1rem;
+  }
+
+  .lp03-card-fan {
+    width: 88px;
+    height: 88px;
+  }
+
+  .lp03-hero-sidenote {
+    max-width: 100%;
+    margin-top: 0.75rem;
+  }
+
+  .lp03-scroll-indicator {
+    display: none;
+  }
+
+  .lp03-scattered-notes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lp03-platform-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .lp03-voar-chips-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lp03-creation-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .lp03-transformation-canvas {
+    flex-direction: column;
+    padding: 1.35rem;
+  }
+
+  .lp03-t-node {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .lp03-library-board,
+  .lp03-audience-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

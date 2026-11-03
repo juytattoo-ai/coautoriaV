@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import AppLayout from './components/AppLayout';
@@ -12,6 +12,12 @@ import Novidades from './pages/Novidades';
 import Perfil from './pages/Perfil';
 import Home from './pages/Home';
 import StepRouteGuard from './components/StepRouteGuard';
+
+// Landing Pages (Estrutura Compartilhada)
+import Landing01DescubraSuaHistoria from './landing/pages/Landing01DescubraSuaHistoria';
+import Landing02DescubraPorTrasDeVoce from './landing/pages/Landing02DescubraPorTrasDeVoce';
+import Landing03IdeiasBlocoDeNotas from './landing/pages/Landing03IdeiasBlocoDeNotas';
+import Landing04DesafioStorytelling from './landing/pages/Landing04DesafioStorytelling';
 
 // Passos do Método VOAR (Módulo Voz)
 import Step1Convite from './pages/Step1Convite';
@@ -28,8 +34,11 @@ import TermosDeUso from './pages/TermosDeUso';
 
 function AppContent() {
   const { user } = useAuth();
+  const location = useLocation();
   const [guestDismissed, setGuestDismissed] = useState(false);
   const [manualReplay, setManualReplay] = useState(false);
+
+  const isLandingRoute = location.pathname.startsWith('/lp');
 
   // Sempre que o usuário conectar a conta, garante que o onboarding automático não apareça.
   // Se desconectar depois, volta a exibir para visitante deslogado.
@@ -41,12 +50,38 @@ function AppContent() {
     }
   }, [user]);
 
-  const showOnboarding = (!user && !guestDismissed) || manualReplay;
+  const showOnboarding = !isLandingRoute && ((!user && !guestDismissed) || manualReplay);
 
   const handleCompleteOnboarding = () => {
     setGuestDismissed(true);
     setManualReplay(false);
   };
+
+  // Se estiver em uma das 4 Landing Pages (/lp/*), renderiza com o LandingLayout próprio
+  if (isLandingRoute) {
+    return (
+      <Routes>
+        <Route path="/lp" element={<Navigate to="/lp/1" replace />} />
+        <Route path="/lp/1" element={<Landing01DescubraSuaHistoria />} />
+        <Route path="/lp/voce-tem-uma-historia" element={<Landing01DescubraSuaHistoria />} />
+        <Route path="/lp/2" element={<Landing02DescubraPorTrasDeVoce />} />
+        <Route
+          path="/lp/descubra-o-que-existe-por-tras-de-voce"
+          element={<Landing02DescubraPorTrasDeVoce />}
+        />
+        <Route path="/lp/3" element={<Landing03IdeiasBlocoDeNotas />} />
+        <Route
+          path="/lp/suas-ideias-nao-precisam-morrer-no-bloco-de-notas"
+          element={<Landing03IdeiasBlocoDeNotas />}
+        />
+        <Route path="/lp/4" element={<Landing04DesafioStorytelling />} />
+        <Route
+          path="/lp/voce-consegue-contar-essa-historia"
+          element={<Landing04DesafioStorytelling />}
+        />
+      </Routes>
+    );
+  }
 
   return (
     <>

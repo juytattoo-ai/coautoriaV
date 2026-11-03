@@ -1,0 +1,509 @@
+/* ==========================================================================
+   COAUTORIA · ARQUITETURA COMPARTILHADA DAS 4 LANDING PAGES (DESKTOP & MOBILE)
+   - Suporta visualização nativa em celulares (Instagram / TikTok)
+   - Inclui Simulador Mobile (390px) integrado na barra superior + Container Queries
+   ========================================================================== */
+
+.lp-outer-stage {
+  min-height: 100vh;
+  background-color: #f6f4ef;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .lp-outer-stage {
+  background-color: #0d0e11;
+}
+
+/* Fundo de estúdio quando o Simulador Mobile (390px) está ativo no Desktop */
+.lp-outer-stage.lp-stage-mobile-simulator {
+  background: radial-gradient(circle at 50% 20%, #2a2723 0%, #141311 100%);
+  padding-bottom: 3rem;
+}
+
+.lp-switcher-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Barra superior fixa para alternar entre as 4 LPs e entre Desktop / Mobile */
+.lp-preview-switcher-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #181715;
+  color: #f6f4ef;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.45rem 0;
+  font-size: 0.7rem;
+}
+
+.lp-preview-switcher-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.lp-switcher-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.lp-switcher-label {
+  color: rgba(246, 244, 239, 0.65);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  font-size: 0.62rem;
+}
+
+.lp-switcher-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.lp-switcher-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.lp-switcher-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.24rem 0.62rem;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.04);
+  color: rgba(246, 244, 239, 0.82);
+  font-size: 0.66rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.lp-switcher-pill:hover {
+  border-color: #eb6b24;
+  color: #ffffff;
+}
+
+.lp-switcher-pill.active {
+  background-color: #eb6b24;
+  color: #ffffff;
+  border-color: #eb6b24;
+}
+
+.lp-pill-num {
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.lp-switcher-pill.active .lp-pill-num {
+  color: #ffffff;
+}
+
+/* Botões de alternância Desktop vs. Mobile (390px) */
+.lp-viewport-toggle-group {
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 2px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.lp-viewport-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.26rem 0.65rem;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: rgba(246, 244, 239, 0.72);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: all 0.18s ease;
+}
+
+.lp-viewport-btn:hover {
+  color: #ffffff;
+}
+
+.lp-viewport-btn.active {
+  background-color: #f6f4ef;
+  color: #181715;
+}
+
+/* Moldura do Simulador Mobile (390px - formato iPhone / Smartphone vertical) */
+.lp-device-frame {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-device-frame.is-mobile-device {
+  width: 392px;
+  max-width: 96vw;
+  margin: 1.5rem auto 0;
+  border-radius: 40px;
+  border: 10px solid #2b2927;
+  box-shadow:
+    0 0 0 2px #44403c,
+    0 28px 70px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  background-color: #f6f4ef;
+}
+
+.lp-phone-notch-bar {
+  height: 32px;
+  background-color: #181715;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.lp-phone-dynamic-island {
+  width: 76px;
+  height: 16px;
+  border-radius: 999px;
+  background-color: #000000;
+}
+
+/* Container Principal da Landing Page com suporte a Container Queries */
+.lp-shell {
+  container-type: inline-size;
+  container-name: lpshell;
+  position: relative;
+  min-height: 100vh;
+  background-color: #f6f4ef;
+  color: #181715;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .lp-shell {
+  background-color: #111215;
+  color: #f2efe7;
+}
+
+.lp-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .lp-shell:not(.lp-mobile-view) .lp-container {
+    padding: 0 3rem;
+  }
+}
+
+/* Cabeçalho Editorial */
+.lp-shared-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background-color: rgba(246, 244, 239, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+[data-theme="dark"] .lp-shared-header {
+  background-color: rgba(17, 18, 21, 0.92);
+}
+
+.lp-header-inner {
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.lp-wordmark {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #d95a2b !important;
+  text-decoration: none;
+}
+
+.lp-wordmark-dot {
+  color: var(--text-primary);
+}
+
+.lp-header-center-nav {
+  display: none;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+@media (min-width: 860px) {
+  .lp-shell:not(.lp-mobile-view) .lp-header-center-nav {
+    display: flex;
+  }
+}
+
+.lp-header-center-nav a {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  transition: color 0.18s ease;
+}
+
+.lp-header-center-nav a:hover {
+  color: #d95a2b;
+}
+
+.lp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.lp-main-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+
+/* Botões de CTA */
+.lp-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 1px solid transparent;
+  text-align: center;
+}
+
+.lp-cta-dot {
+  font-size: 1.1em;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.lp-cta-sm {
+  padding: 0.52rem 0.85rem;
+  font-size: 0.64rem;
+}
+
+.lp-cta-md {
+  padding: 0.88rem 1.45rem;
+  font-size: 0.73rem;
+}
+
+.lp-cta-lg {
+  padding: 1.05rem 1.85rem;
+  font-size: 0.76rem;
+}
+
+/* No celular ou no simulador mobile, botões principais ficam fáceis de tocar com o polegar */
+@container lpshell (max-width: 520px) {
+  .lp-cta-lg,
+  .lp-cta-md {
+    width: 100%;
+    padding: 0.98rem 1.25rem;
+  }
+}
+
+.lp-cta-primary {
+  background-color: #d95a2b;
+  color: #ffffff !important;
+  border-color: #d95a2b;
+}
+
+.lp-cta-primary:hover {
+  background-color: #181715;
+  border-color: #181715;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .lp-cta-primary:hover {
+  background-color: #f2efe7;
+  border-color: #f2efe7;
+  color: #111215 !important;
+}
+
+.lp-cta-dark {
+  background-color: #181715;
+  color: #f6f4ef !important;
+  border-color: #181715;
+}
+
+.lp-cta-dark:hover {
+  background-color: #d95a2b;
+  border-color: #d95a2b;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.lp-cta-outline {
+  background-color: transparent;
+  color: var(--text-primary) !important;
+  border-color: rgba(24, 23, 21, 0.25);
+}
+
+[data-theme="dark"] .lp-cta-outline {
+  border-color: rgba(242, 239, 231, 0.25);
+}
+
+.lp-cta-outline:hover {
+  border-color: #d95a2b;
+  color: #d95a2b !important;
+}
+
+/* Variante mesclada ao design: mesma forma geométrica dos botões, mas suave, sem cor saturada */
+.lp-cta-blended {
+  background-color: rgba(217, 90, 43, 0.09);
+  color: #8f492e !important;
+  border-color: rgba(217, 90, 43, 0.28);
+}
+
+[data-theme="dark"] .lp-cta-blended {
+  background-color: rgba(217, 90, 43, 0.14);
+  color: #e4a38a !important;
+  border-color: rgba(217, 90, 43, 0.32);
+}
+
+.lp-cta-blended:hover {
+  background-color: rgba(217, 90, 43, 0.16);
+  border-color: rgba(217, 90, 43, 0.48);
+  color: #6e341e !important;
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .lp-cta-blended:hover {
+  background-color: rgba(217, 90, 43, 0.24);
+  color: #f5cab8 !important;
+}
+
+.lp-cta-arrow {
+  transition: transform 0.22s ease;
+}
+
+.lp-cta-btn:hover .lp-cta-arrow {
+  transform: translateX(4px);
+}
+
+/* Animação Reveal On Scroll */
+.lp-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lp-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Rodapé Editorial Minimalista */
+.lp-shared-footer {
+  border-top: 1px solid rgba(24, 23, 21, 0.1);
+  padding: 3rem 0 2rem;
+}
+
+[data-theme="dark"] .lp-shared-footer {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.lp-footer-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding-bottom: 2rem;
+}
+
+@container lpshell (min-width: 760px) {
+  .lp-footer-inner {
+    grid-template-columns: 1fr 1.6fr;
+    gap: 4rem;
+  }
+}
+
+.lp-footer-manifesto {
+  margin-top: 0.4rem;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+}
+
+.lp-footer-links-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1.35rem;
+}
+
+.lp-footer-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.lp-footer-group-title {
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #d95a2b;
+  margin-bottom: 0.15rem;
+}
+
+.lp-footer-group a {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.lp-footer-group a:hover {
+  color: #d95a2b;
+}
+
+.lp-footer-bottom {
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(24, 23, 21, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.lp-footer-coordinates {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
