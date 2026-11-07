@@ -105,14 +105,17 @@ export default function Step7Proposito() {
 
   const isComplete = Object.values(formData).every(val => val.trim().length > 0);
 
+  if (showCelebration) {
+    return (
+      <VoarStepCelebration
+        stepNumber={7}
+        onContinue={() => navigate('/passo-8')}
+      />
+    );
+  }
+
   return (
     <div className="page-container animate-fade-in">
-      {showCelebration && (
-        <VoarStepCelebration
-          stepNumber={7}
-          onContinue={() => navigate('/passo-8')}
-        />
-      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>

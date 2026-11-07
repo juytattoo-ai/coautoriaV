@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   PenTool, BookOpen, TrendingUp, Map, Mail, Search, Target, Database, Award, 
-  CheckCircle, ArrowLeft, Lock, Coffee 
+  CheckCircle, ArrowLeft, Lock, Coffee, Sparkles 
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserVoarProgress } from '../lib/userProgress';
-import { VoarBackgroundConstellation, VoarStepProgressBar, VOAR_GROUP_MILESTONES } from '../components/VoarConstellation';
+import { VoarBackgroundConstellation, VoarStepProgressBar, VoarStepCelebration, VOAR_GROUP_MILESTONES } from '../components/VoarConstellation';
 import './Home.css';
 
 const STEPS = [
@@ -115,6 +115,7 @@ export default function Home() {
     percentage: 0
   });
   const [loading, setLoading] = useState(true);
+  const [celebrationCycleStep, setCelebrationCycleStep] = useState(null);
 
   useEffect(() => {
     async function loadProgress() {
@@ -147,6 +148,15 @@ export default function Home() {
     : STEPS.filter(step => step.id === 1);
 
   const completedCount = progressData.completedCount ?? Object.keys(progressData.completedSteps || {}).length;
+
+  if (celebrationCycleStep) {
+    return (
+      <VoarStepCelebration
+        stepNumber={celebrationCycleStep}
+        onContinue={() => setCelebrationCycleStep(null)}
+      />
+    );
+  }
 
   return (
     <div className="home-container animate-fade-in" style={{ position: 'relative' }}>
@@ -256,6 +266,14 @@ export default function Home() {
                     </span>
                     <h4 className="motivational-title">{milestoneMsg.title}</h4>
                     <p className="motivational-text">{milestoneMsg.message}</p>
+                    <button
+                      type="button"
+                      className="btn-outline text-xs mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded"
+                      onClick={() => setCelebrationCycleStep(groupInfo.milestoneStep)}
+                    >
+                      <Sparkles size={13} />
+                      <span>Ver animação das 3 estrelas deste ciclo</span>
+                    </button>
                   </div>
                 </div>
               )}

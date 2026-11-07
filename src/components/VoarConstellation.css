@@ -29,6 +29,17 @@
   overflow: visible;
 }
 
+/* Garante que todos os cards, gráficos, cabeçalhos e formulários em todos os passos
+   fiquem em uma camada superior (z-index: 2) e sólidos sobre a constelação de fundo,
+   evitando que a constelação apareça atrás de cards ou fique cortada ao meio */
+.step-content-wrapper>*:not(.voar-bg-constellation-layer),
+.home-container>*:not(.voar-bg-constellation-layer),
+.voar-hub-page>*:not(.voar-bg-constellation-layer),
+.conclusion-wrapper>*:not(.voar-bg-constellation-layer) {
+  position: relative;
+  z-index: 2;
+}
+
 /* 2. Barra de Conclusão nos 9 Passos + Mini Constelação */
 .voar-step-progress-banner {
   display: flex;
@@ -184,8 +195,14 @@
    ========================================================================== */
 .voar-celebration-overlay {
   position: fixed;
-  inset: 0;
-  z-index: 9999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 99999;
   background-color: var(--bg-color);
   color: var(--text-primary);
   display: flex;
@@ -193,12 +210,17 @@
   justify-content: center;
   padding: 1.25rem;
   overflow-y: auto;
-  animation: voarOverlayFadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: voarOverlayFadeIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes voarOverlayFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .voar-celebration-inner {
@@ -313,12 +335,19 @@
 }
 
 @keyframes voarDrawLine {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes voarFadeSecLine {
-  from { opacity: 0; }
-  to { opacity: 0.55; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.55;
+  }
 }
 
 .voar-star-unlit-dot {
@@ -352,8 +381,15 @@
 }
 
 @keyframes voarNumberIgnite {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .voar-star-core-lit {
@@ -367,8 +403,15 @@
 }
 
 @keyframes voarStarPulse {
-  0% { transform: scale(0.8); opacity: 0.4; }
-  100% { transform: scale(1.25); opacity: 0.9; }
+  0% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: scale(1.25);
+    opacity: 0.9;
+  }
 }
 
 .voar-star-flare line {
@@ -383,8 +426,13 @@
 }
 
 @keyframes voarStarIgniteAppear {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .voar-star-ignition-core {
@@ -395,9 +443,17 @@
 }
 
 @keyframes voarCorePop {
-  0% { transform: scale(0.2); }
-  60% { transform: scale(1.45); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0.2);
+  }
+
+  60% {
+    transform: scale(1.45);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .voar-star-ignition-ring {
@@ -411,8 +467,15 @@
 }
 
 @keyframes voarIgnitionShockwave {
-  0% { transform: scale(0.5); opacity: 0.9; }
-  100% { transform: scale(3.4); opacity: 0; }
+  0% {
+    transform: scale(0.5);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
 }
 
 .voar-star-ignition-aura {
@@ -514,8 +577,15 @@
 }
 
 @keyframes voarTextFadeUp {
-  0% { opacity: 0; transform: translateY(16px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .voar-fade-up-1 {
@@ -615,4 +685,287 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--primary-color);
+}
+
+/* ==========================================================================
+   TELA DE TRANSIÇÃO DE CICLO (PASSOS 3, 6 e 9) — ESTILO ONBOARDING
+   Acende as 3 estrelas do ciclo uma a uma com a mensagem do ciclo
+   ========================================================================== */
+
+.voar-star-cycle-seq-group {
+  opacity: 0;
+  animation: voarStarIgniteAppear 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.voar-star-cycle-core {
+  fill: var(--primary-color);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: voarCorePop 0.75s cubic-bezier(0.22, 1.4, 0.36, 1) forwards;
+}
+
+.voar-star-cycle-ring {
+  stroke: var(--primary-color);
+  stroke-width: 1.25;
+  fill: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: voarIgnitionShockwave 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.voar-celebration-overlay.is-cycle-onboarding {
+  background: radial-gradient(circle at 50% 24%, rgba(184, 74, 32, 0.08) 0%, var(--bg-color) 70%);
+  padding: 1.5rem 1.25rem;
+}
+
+.voar-cycle-ambient-glow {
+  position: fixed;
+  width: 440px;
+  height: 440px;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184, 74, 32, 0.11) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.voar-cycle-paper-lines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  background-image: repeating-linear-gradient(to bottom,
+      transparent,
+      transparent 31px,
+      var(--border-color-light) 32px);
+}
+
+.voar-cycle-onboarding-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 600px;
+  min-height: min(100%, 690px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.voar-cycle-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.voar-cycle-segments {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.voar-cycle-segment {
+  height: 3px;
+  border-radius: 99px;
+  background: var(--border-color);
+  overflow: hidden;
+  position: relative;
+}
+
+.voar-cycle-segment-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--primary-color);
+}
+
+.voar-cycle-segment.completed .voar-cycle-segment-fill {
+  width: 100%;
+}
+
+.voar-cycle-segment.active .voar-cycle-segment-fill {
+  width: 100%;
+  animation: voarSegmentFill 2.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes voarSegmentFill {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.voar-cycle-top-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.voar-cycle-stars-tag {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.voar-cycle-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+  width: 100%;
+}
+
+.voar-cycle-visual-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.voar-cycle-triad-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.voar-cycle-step-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: var(--bg-color-light);
+  border: 1px solid rgba(184, 74, 32, 0.35);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.74rem;
+  color: var(--text-primary);
+  opacity: 0;
+  transform: translateY(8px) scale(0.95);
+  animation: voarStepPillIgnite 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes voarStepPillIgnite {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pill-star-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pill-step-num {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 0.7rem;
+}
+
+.pill-step-name {
+  font-weight: 500;
+}
+
+.voar-cycle-text-block {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.voar-cycle-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--primary-color);
+  background: var(--primary-color-light);
+  border: 1px solid rgba(184, 74, 32, 0.28);
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+}
+
+.voar-cycle-headline {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 500;
+  line-height: 1.28;
+  color: var(--text-primary);
+}
+
+@media (min-width: 640px) {
+  .voar-cycle-headline {
+    font-size: 1.95rem;
+  }
+}
+
+.voar-cycle-subtext {
+  font-family: var(--font-sans);
+  font-size: 0.96rem;
+  line-height: 1.68;
+  color: var(--text-secondary);
+}
+
+.voar-cycle-fade-1 {
+  opacity: 0;
+  animation: voarTextFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 1.8s forwards;
+}
+
+.voar-cycle-fade-2 {
+  opacity: 0;
+  animation: voarTextFadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 2.0s forwards;
+}
+
+.voar-cycle-fade-3 {
+  opacity: 0;
+  animation: voarTextFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.2s forwards;
+}
+
+.voar-cycle-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color-light);
+}
+
+@media (max-width: 520px) {
+  .voar-cycle-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .voar-cycle-footer button {
+    justify-content: center;
+    width: 100%;
+  }
 }

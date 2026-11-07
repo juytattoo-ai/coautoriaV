@@ -87,14 +87,17 @@ export default function Step6OEspelho() {
   const answeredCount = answers.filter(a => a.trim().length > 0).length;
   const isComplete = answeredCount === 10;
 
+  if (showCelebration) {
+    return (
+      <VoarStepCelebration
+        stepNumber={6}
+        onContinue={() => navigate('/passo-7')}
+      />
+    );
+  }
+
   return (
     <div className="page-container animate-fade-in">
-      {showCelebration && (
-        <VoarStepCelebration
-          stepNumber={6}
-          onContinue={() => navigate('/passo-7')}
-        />
-      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>

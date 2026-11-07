@@ -153,18 +153,85 @@
 }
 
 .perfil-avatar-circle {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-xs);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
   background: var(--bg-color-tint);
   color: var(--primary-color);
-  border: 1px solid var(--border-color-dark);
+  border: 1.5px solid var(--border-color-dark);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-dropzone {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  border: 1.5px dashed var(--border-color-dark);
+  border-radius: var(--radius-xs);
+  background: var(--bg-color-tint);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  position: relative;
+}
+
+.avatar-dropzone:hover,
+.avatar-dropzone.dragging {
+  border-color: var(--primary-color);
+  background: var(--primary-color-light);
+}
+
+.avatar-dropzone-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.avatar-dropzone-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.avatar-dropzone-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.avatar-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-color-light);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.avatar-remove-btn:hover {
+  color: var(--danger-color);
+  border-color: var(--danger-color);
 }
 
 .perfil-form-grid {

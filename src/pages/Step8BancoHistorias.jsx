@@ -126,14 +126,17 @@ export default function Step8BancoHistorias() {
     }
   };
 
+  if (showCelebration) {
+    return (
+      <VoarStepCelebration
+        stepNumber={8}
+        onContinue={() => navigate('/passo-9')}
+      />
+    );
+  }
+
   return (
     <div className="page-container animate-fade-in">
-      {showCelebration && (
-        <VoarStepCelebration
-          stepNumber={8}
-          onContinue={() => navigate('/passo-9')}
-        />
-      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>

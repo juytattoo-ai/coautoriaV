@@ -1,0 +1,19 @@
+{
+  "name": "CoAutoria — Método V.O.A.R.",
+  "short_name": "CoAutoria",
+  "description": "Um espaço seguro e guiado para descobrir, organizar e compartilhar suas histórias através do Método V.O.A.R.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fbf9f5",
+  "theme_color": "#fbf9f5",
+  "icons": [
+    {
+      "src": "/image/icone%20app.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

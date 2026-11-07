@@ -14,6 +14,8 @@ dist-ssr
 .env
 .env.local
 !.env.example
+.vercel
+guia_correcao_ia.md
 
 # Editor directories and files
 .vscode/*

@@ -1,0 +1,5 @@
+Coloque aqui os materiais da Google Play Store:
+- icone-512x512.png (512 x 512 px)
+- feature-graphic-1024x500.png (1024 x 500 px)
+- 4 a 8 prints do app em tela cheia (sem barra de navegador)
+

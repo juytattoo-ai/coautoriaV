@@ -102,14 +102,17 @@ export default function Step3LinhaDoTempo() {
     emocao: ev.emotion
   }));
 
+  if (showCelebration) {
+    return (
+      <VoarStepCelebration
+        stepNumber={3}
+        onContinue={() => navigate('/passo-4')}
+      />
+    );
+  }
+
   return (
     <div className="page-container animate-fade-in">
-      {showCelebration && (
-        <VoarStepCelebration
-          stepNumber={3}
-          onContinue={() => navigate('/passo-4')}
-        />
-      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>

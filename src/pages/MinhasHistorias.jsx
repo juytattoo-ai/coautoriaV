@@ -212,7 +212,8 @@ export default function MinhasHistorias() {
   const handleSendToPublicArchive = async (story) => {
     const isCurrentlyPublic = story.visibility !== 'privado';
     const nextVisibility = isCurrentlyPublic ? 'privado' : 'publico';
-    const nextStatus = 'aprovado';
+    // F-01: Histórias enviadas para a Roda entram como pendente_aprovacao no servidor até validação do Admin
+    const nextStatus = nextVisibility === 'privado' ? 'aprovado' : 'pendente_aprovacao';
 
     const updatedStory = {
       ...story,
@@ -255,6 +256,10 @@ export default function MinhasHistorias() {
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert('A imagem deve ter no máximo 5 MB. Por favor, escolha uma foto menor.');
+        return;
+      }
       setImageFile(file);
       setImageUrl(URL.createObjectURL(file));
     }
@@ -271,7 +276,7 @@ export default function MinhasHistorias() {
 
       if (user && audioBlob) {
         try {
-          const fileName = `audio-${user.id}-${Date.now()}.webm`;
+          const fileName = `${user.id}/audio-${user.id}-${Date.now()}.webm`;
           const { error: uploadError } = await supabase.storage
             .from('audio_stories')
             .upload(fileName, audioBlob);
@@ -286,12 +291,12 @@ export default function MinhasHistorias() {
 
       if (user && imageFile) {
         try {
-          const fileName = `written-${user.id}-${Date.now()}-${imageFile.name}`;
+          const fileName = `${user.id}/written-${user.id}-${Date.now()}-${imageFile.name}`;
           const { error: uploadError } = await supabase.storage
             .from('letters')
-            .upload(`written/${fileName}`, imageFile);
+            .upload(fileName, imageFile);
           if (!uploadError) {
-            const { data } = supabase.storage.from('letters').getPublicUrl(`written/${fileName}`);
+            const { data } = supabase.storage.from('letters').getPublicUrl(fileName);
             finalImageUrl = data?.publicUrl || imageUrl;
           }
         } catch (storageErr) {
@@ -312,7 +317,7 @@ export default function MinhasHistorias() {
         audio_url: finalAudioUrl,
         image_url: finalImageUrl,
         visibility,
-        status: 'aprovado',
+        status: visibility === 'privado' ? 'aprovado' : 'pendente_aprovacao',
         likes_count: editingStory?.likes_count || 0,
         comments_count: editingStory?.comments_count || 0,
         created_at: editingStory?.created_at || new Date().toISOString()
@@ -756,6 +761,11 @@ export default function MinhasHistorias() {
                     </div>
                   </label>
                 </div>
+                {visibility !== 'privado' && (
+                  <p className="text-xs text-secondary mt-2 leading-relaxed">
+                    Ao compartilhar na Roda de Histórias, você concorda com as <a href="/termos" target="_blank" rel="noopener noreferrer" className="text-primary underline">Diretrizes de Convivência e Respeito da Comunidade</a>.
+                  </p>
+                )}
               </div>
 
               <div className="sheet-actions">

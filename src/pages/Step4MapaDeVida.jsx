@@ -132,14 +132,17 @@ export default function Step4MapaDeVida() {
   };
   const nextChapter = getNextChapter();
 
+  if (showCelebration) {
+    return (
+      <VoarStepCelebration
+        stepNumber={4}
+        onContinue={() => navigate('/passo-5')}
+      />
+    );
+  }
+
   return (
     <div className="page-container animate-fade-in">
-      {showCelebration && (
-        <VoarStepCelebration
-          stepNumber={4}
-          onContinue={() => navigate('/passo-5')}
-        />
-      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>

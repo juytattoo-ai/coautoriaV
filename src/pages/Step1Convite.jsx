@@ -131,14 +131,17 @@ export default function Step1Convite() {
     await supabase.auth.signOut();
   };
 
+  if (showCelebration) {
+    return (
+      <VoarStepCelebration
+        stepNumber={1}
+        onContinue={() => navigate('/passo-2')}
+      />
+    );
+  }
+
   return (
     <div className="page-container animate-fade-in">
-      {showCelebration && (
-        <VoarStepCelebration
-          stepNumber={1}
-          onContinue={() => navigate('/passo-2')}
-        />
-      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>

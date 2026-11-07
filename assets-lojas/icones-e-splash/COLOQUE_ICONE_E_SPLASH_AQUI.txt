@@ -1,0 +1,4 @@
+Coloque aqui:
+- icon.png (1024x1024 px, sem transparência)
+- splash.png (2732x2732 px, logo centralizada sobre fundo #fbf9f5)
+

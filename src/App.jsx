@@ -39,6 +39,13 @@ function AppContent() {
   const [manualReplay, setManualReplay] = useState(false);
 
   const isLandingRoute = location.pathname.startsWith('/lp');
+  const isPublicLegalRoute =
+    location.pathname === '/termos' || location.pathname === '/privacidade';
+
+  // Sempre que mudar de rota (ex: avançar de um passo para outro), rola para o topo da página
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [location.pathname]);
 
   // Sempre que o usuário conectar a conta, garante que o onboarding automático não apareça.
   // Se desconectar depois, volta a exibir para visitante deslogado.
@@ -50,7 +57,8 @@ function AppContent() {
     }
   }, [user]);
 
-  const showOnboarding = !isLandingRoute && ((!user && !guestDismissed) || manualReplay);
+  const showOnboarding =
+    !isLandingRoute && !isPublicLegalRoute && ((!user && !guestDismissed) || manualReplay);
 
   const handleCompleteOnboarding = () => {
     setGuestDismissed(true);
@@ -188,6 +196,7 @@ function AppContent() {
               } 
             />
             <Route path="/termos" element={<TermosDeUso />} />
+            <Route path="/privacidade" element={<TermosDeUso />} />
           </Routes>
         </AppLayout>
     </>

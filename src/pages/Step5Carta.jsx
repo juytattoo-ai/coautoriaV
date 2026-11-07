@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Edit3, Mail, Camera, UploadCloud, CheckCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
@@ -17,9 +17,35 @@ export default function Step5Carta() {
   const [showCelebration, setShowCelebration] = useState(false);
   const fileInputRef = useRef(null);
 
+  useEffect(() => {
+    if (!user) return;
+    async function fetchPastLetter() {
+      try {
+        const { data } = await supabase
+          .from('past_letters')
+          .select('image_url')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (data?.image_url) {
+          setPreview(data.image_url);
+          setIsSaved(true);
+        }
+      } catch (err) {
+        console.error('Erro ao buscar carta do passo 5:', err);
+      }
+    }
+    fetchPastLetter();
+  }, [user]);
+
   const handleFileSelect = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        alert('A imagem deve ter no máximo 5 MB. Por favor, escolha uma foto menor.');
+        return;
+      }
       setFile(selectedFile);
       // Create local preview
       const objectUrl = URL.createObjectURL(selectedFile);
@@ -36,10 +62,10 @@ export default function Step5Carta() {
     setLoading(true);
 
     try {
-      // 1. Upload to Supabase Storage
+      // 1. Upload to Supabase Storage inside user's scoped folder
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-      const filePath = `letters/${fileName}`;
+      const filePath = `${user.id}/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('letters')
@@ -73,14 +99,17 @@ export default function Step5Carta() {
     }
   };
 
+  if (showCelebration) {
+    return (
+      <VoarStepCelebration
+        stepNumber={5}
+        onContinue={() => navigate('/passo-6')}
+      />
+    );
+  }
+
   return (
     <div className="page-container animate-fade-in">
-      {showCelebration && (
-        <VoarStepCelebration
-          stepNumber={5}
-          onContinue={() => navigate('/passo-6')}
-        />
-      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>

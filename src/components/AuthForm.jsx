@@ -26,14 +26,19 @@ export default function AuthForm() {
     
     try {
       // Supabase sends a reset link to the email
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        // You can specify a redirect URL here if needed, e.g., redirectTo: window.location.origin + '/reset-password'
+      // F-06 (Anti-enumeração): Mesmo que o e-mail não exista, exibimos mensagem padronizada
+      await supabase.auth.resetPasswordForEmail(email.trim());
+      setMessage({
+        type: 'success',
+        text: 'Se este e-mail estiver cadastrado, enviaremos um link de recuperação em instantes.'
       });
-      if (error) throw error;
-      setMessage({ type: 'success', text: 'Link de recuperação enviado! Verifique seu e-mail.' });
       setIsResetting(false);
-    } catch (error) {
-      setMessage({ type: 'error', text: error.message || 'Erro ao tentar recuperar a senha.' });
+    } catch {
+      setMessage({
+        type: 'success',
+        text: 'Se este e-mail estiver cadastrado, enviaremos um link de recuperação em instantes.'
+      });
+      setIsResetting(false);
     } finally {
       setLoading(false);
     }
@@ -56,24 +61,29 @@ export default function AuthForm() {
     try {
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({
-          email,
+          email: email.trim(),
           password,
         });
-        if (error) throw error;
+        if (error) {
+          // F-06 (Anti-enumeração): Mensagem genérica que não revela se o e-mail existe ou não
+          throw new Error('E-mail ou senha incorretos. Verifique seus dados e tente novamente.');
+        }
         // User will be automatically set in AuthContext
       } else {
         const { error } = await supabase.auth.signUp({
-          email,
+          email: email.trim(),
           password,
           options: {
             data: {
-              full_name: fullName,
-              whatsapp: whatsapp,
+              full_name: fullName.trim(),
+              whatsapp: whatsapp.trim(),
             }
           }
         });
         
-        if (error) throw error;
+        if (error) {
+          throw new Error('Não foi possível concluir o cadastro. Verifique os dados informados ou tente recuperar sua senha.');
+        }
         setMessage({ 
           type: 'success', 
           text: 'Conta criada! Você já pode entrar ou verifique seu e-mail se necessário.' 
@@ -81,7 +91,7 @@ export default function AuthForm() {
         setIsLogin(true); // Switch to login view
       }
     } catch (error) {
-      setMessage({ type: 'error', text: error.message || 'Ocorreu um erro.' });
+      setMessage({ type: 'error', text: error.message || 'Credenciais inválidas. Tente novamente.' });
     } finally {
       setLoading(false);
     }

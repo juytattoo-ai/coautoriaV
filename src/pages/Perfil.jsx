@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   User, 
   Mail, 
@@ -13,7 +13,9 @@ import {
   AlertTriangle,
   Award,
   Sparkles,
-  Play
+  Play,
+  UploadCloud,
+  X
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
@@ -31,7 +33,10 @@ export default function Perfil({ onReplayOnboarding }) {
   const [email, setEmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
+  const [photoFile, setPhotoFile] = useState(null);
+  const [isDraggingPhoto, setIsDraggingPhoto] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  const avatarInputRef = useRef(null);
 
   // Progress stats
   const [progressData, setProgressData] = useState({
@@ -53,6 +58,50 @@ export default function Perfil({ onReplayOnboarding }) {
     }
   }, [user]);
 
+  const MAX_AVATAR_BYTES = 5 * 1024 * 1024; // 5 MB
+  const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+
+  const processSelectedAvatar = (file) => {
+    if (!file) return;
+    if (file.type && !ALLOWED_IMAGE_TYPES.includes(file.type) && !file.type.startsWith('image/')) {
+      setStatusMsg({
+        type: 'error',
+        text: 'Formato inválido. Escolha uma imagem JPG, PNG, WEBP ou HEIC.'
+      });
+      return;
+    }
+    if (file.size > MAX_AVATAR_BYTES) {
+      setStatusMsg({
+        type: 'error',
+        text: 'A foto de perfil deve ter no máximo 5 MB. Por favor, escolha uma imagem menor.'
+      });
+      return;
+    }
+
+    setStatusMsg({ type: '', text: '' });
+    setPhotoFile(file);
+    setPhotoUrl(URL.createObjectURL(file));
+  };
+
+  const handleAvatarFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) processSelectedAvatar(file);
+  };
+
+  const handleAvatarDrop = (e) => {
+    e.preventDefault();
+    setIsDraggingPhoto(false);
+    const file = e.dataTransfer?.files?.[0];
+    if (file) processSelectedAvatar(file);
+  };
+
+  const handleRemoveAvatar = (e) => {
+    e.stopPropagation();
+    setPhotoFile(null);
+    setPhotoUrl('');
+    if (avatarInputRef.current) avatarInputRef.current.value = '';
+  };
+
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     if (!user) return;
@@ -60,12 +109,36 @@ export default function Perfil({ onReplayOnboarding }) {
     setStatusMsg({ type: '', text: '' });
 
     try {
+      let finalAvatarUrl = photoUrl;
+
+      // Se o usuário selecionou ou arrastou um novo arquivo de foto, faz upload para o Supabase Storage
+      if (photoFile) {
+        const ext = (photoFile.name.split('.').pop() || 'jpg').toLowerCase();
+        const filePath = `${user.id}/avatar-${user.id}-${Date.now()}.${ext}`;
+        const { error: uploadErr } = await supabase.storage
+          .from('letters')
+          .upload(filePath, photoFile, { upsert: true });
+
+        if (!uploadErr) {
+          const { data: urlData } = supabase.storage
+            .from('letters')
+            .getPublicUrl(filePath);
+          if (urlData?.publicUrl) {
+            finalAvatarUrl = urlData.publicUrl;
+            setPhotoUrl(finalAvatarUrl);
+            setPhotoFile(null);
+          }
+        } else {
+          throw new Error('Não foi possível enviar a foto para o servidor. Verifique sua conexão ou o tamanho da imagem (máx. 5 MB).');
+        }
+      }
+
       // 1. Atualizar dados do usuário (metadados e email se modificado)
       const updates = {
         data: {
           full_name: fullName,
           whatsapp: whatsapp,
-          avatar_url: photoUrl
+          avatar_url: finalAvatarUrl
         }
       };
 
@@ -105,31 +178,36 @@ export default function Perfil({ onReplayOnboarding }) {
 
     try {
       setLoading(true);
-      // Apagar registros do usuário nas tabelas principais
-      await Promise.all([
-        supabase.from('commitments').delete().eq('user_id', user.id),
-        supabase.from('step1_reflections').delete().eq('user_id', user.id),
-        supabase.from('notes').delete().eq('user_id', user.id),
-        supabase.from('timeline_events').delete().eq('user_id', user.id),
-        supabase.from('life_chapters').delete().eq('user_id', user.id),
-        supabase.from('past_letters').delete().eq('user_id', user.id),
-        supabase.from('mirror_reflections').delete().eq('user_id', user.id),
-        supabase.from('purpose_statement').delete().eq('user_id', user.id),
-        supabase.from('raw_stories').delete().eq('user_id', user.id),
-        supabase.from('future_letters').delete().eq('user_id', user.id),
-        supabase.from('user_stories').delete().eq('user_id', user.id)
-      ]);
 
-      // Limpar localStorage
+      // 1. Tenta excluir completamente via função RPC segura no servidor (remove Storage + Tabelas + auth.users)
+      const { error: rpcError } = await supabase.rpc('delete_user_account');
+
+      // 2. Fallback: caso a função RPC ainda não tenha sido aplicada no banco, limpa todas as tabelas reais pelo cliente
+      if (rpcError) {
+        await Promise.allSettled([
+          supabase.from('commitments').delete().eq('user_id', user.id),
+          supabase.from('notes').delete().eq('user_id', user.id),
+          supabase.from('timeline_events').delete().eq('user_id', user.id),
+          supabase.from('timeline_reflections').delete().eq('user_id', user.id),
+          supabase.from('life_map').delete().eq('user_id', user.id),
+          supabase.from('past_letters').delete().eq('user_id', user.id),
+          supabase.from('mirror_patterns').delete().eq('user_id', user.id),
+          supabase.from('purpose_discovery').delete().eq('user_id', user.id),
+          supabase.from('raw_stories').delete().eq('user_id', user.id),
+          supabase.from('future_letters').delete().eq('user_id', user.id),
+          supabase.from('user_stories').delete().eq('user_id', user.id),
+          supabase.from('blocked_users').delete().eq('blocker_id', user.id)
+        ]);
+      }
+
+      // 3. Limpar localStorage e encerrar sessão
       localStorage.clear();
-
-      // Sign out
       await supabase.auth.signOut();
       alert('Sua conta e todos os seus dados foram permanentemente excluídos do Coautoria.');
       window.location.href = '/';
     } catch (err) {
       console.error('Erro ao excluir conta:', err);
-      alert('Não foi possível excluir automaticamente todos os registros no servidor. Desconectando sua sessão.');
+      localStorage.clear();
       await supabase.auth.signOut();
       window.location.href = '/';
     } finally {
@@ -236,22 +314,60 @@ export default function Perfil({ onReplayOnboarding }) {
       <form onSubmit={handleUpdateProfile} className="perfil-form-card mb-6">
         <h3 className="section-title mb-4">Dados Cadastrais</h3>
 
-        <div className="avatar-edit-row mb-4 flex items-center gap-4">
-          <div className="perfil-avatar-circle">
-            {photoUrl ? (
-              <img src={photoUrl} alt="Avatar" className="avatar-img" />
-            ) : (
-              <span>{fullName?.charAt(0) || user.email?.charAt(0) || 'U'}</span>
+        <div className="avatar-edit-row mb-5">
+          <label className="input-label flex items-center gap-1.5 mb-2">
+            <Camera size={15} /> Foto de Perfil
+          </label>
+          <div
+            className={`avatar-dropzone ${isDraggingPhoto ? 'dragging' : ''}`}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDraggingPhoto(true);
+            }}
+            onDragLeave={() => setIsDraggingPhoto(false)}
+            onDrop={handleAvatarDrop}
+            onClick={() => avatarInputRef.current?.click()}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') avatarInputRef.current?.click();
+            }}
+          >
+            <div className="perfil-avatar-circle">
+              {photoUrl ? (
+                <img src={photoUrl} alt="Avatar" className="avatar-img" />
+              ) : (
+                <span>{fullName?.charAt(0) || user.email?.charAt(0) || 'U'}</span>
+              )}
+            </div>
+
+            <div className="avatar-dropzone-info">
+              <span className="avatar-dropzone-title">
+                <UploadCloud size={16} />
+                {photoFile ? photoFile.name : 'Arraste sua foto aqui ou toque para escolher da galeria'}
+              </span>
+              <span className="avatar-dropzone-sub">
+                JPG, PNG, WEBP ou HEIC · Máximo de 5 MB
+              </span>
+            </div>
+
+            {photoUrl && (
+              <button
+                type="button"
+                className="avatar-remove-btn"
+                onClick={handleRemoveAvatar}
+                title="Remover foto de perfil"
+              >
+                <X size={15} />
+              </button>
             )}
-          </div>
-          <div className="flex-1">
-            <label className="text-xs text-secondary font-medium block mb-1">URL da Foto de Perfil</label>
-            <input 
-              type="url"
-              placeholder="https://exemplo.com/minha-foto.jpg"
-              value={photoUrl}
-              onChange={e => setPhotoUrl(e.target.value)}
-              className="perfil-input"
+
+            <input
+              ref={avatarInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
+              onChange={handleAvatarFileChange}
+              style={{ display: 'none' }}
             />
           </div>
         </div>
@@ -346,12 +462,15 @@ export default function Perfil({ onReplayOnboarding }) {
           <ShieldCheck size={26} className="text-primary flex-shrink-0 mt-0.5" />
           <div>
             <h4 className="lgpd-title font-semibold mb-1">Aviso sobre a LGPD e Confidencialidade</h4>
-            <p className="text-xs text-secondary leading-relaxed">
+            <p className="text-xs text-secondary leading-relaxed mb-2">
               Em total conformidade com a <strong>Lei Geral de Proteção de Dados (Lei nº 13.709/2018 - LGPD)</strong>, 
               suas memórias, gravações de áudio e relatos íntimos permanecem estritamente sob sua titularidade. 
               Garantimos criptografia e sigilo absoluto. Suas histórias só se tornam visíveis para outras pessoas se você 
-              optar explicitamente por enviá-las para a Roda de Histórias, onde passam previamente por moderação preventiva.
+              optar explicitamente por enviá-las para a Roda de Histórias, onde contam com ferramentas de moderação e denúncia.
             </p>
+            <a href="/termos" className="text-xs text-primary font-semibold hover:underline">
+              Ler Termos de Uso, Política de Privacidade e Diretrizes da Comunidade →
+            </a>
           </div>
         </div>
       </section>

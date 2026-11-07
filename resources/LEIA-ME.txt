@@ -1,0 +1,4 @@
+Pasta oficial do Capacitor (@capacitor/assets).
+Quando tiver o icon.png (1024x1024) e splash.png (2732x2732), copie-os também para cá e rode:
+npx @capacitor/assets generate
+

@@ -1,0 +1,38 @@
+.terms-content-wrapper {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1rem 0 4rem;
+}
+
+.terms-card {
+  background: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.terms-section h2 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.65rem;
+}
+
+.terms-section p,
+.terms-section li {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .terms-card {
+    padding: 1.35rem;
+  }
+}
+

@@ -1,0 +1,4 @@
+Coloque aqui os materiais da Apple App Store:
+- icone-1024x1024.png (1024 x 1024 px, sem transparência/canal alfa)
+- 4 a 8 prints do iPhone em tela cheia (sem barra do Safari)
+

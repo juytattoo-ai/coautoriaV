@@ -46,7 +46,7 @@ export default function Navigation() {
 
         <div className="sidebar-footer">
           <div className="sidebar-footer-row">
-            <span className="sidebar-version">Versão 1.0 · Mobile First</span>
+            <span className="sidebar-version">Versão 1.0</span>
             <ThemeToggle />
           </div>
         </div>

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles, Coffee, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Sparkles, Coffee, ShieldCheck, Check } from 'lucide-react';
 import './VoarConstellation.css';
 
 export const VOAR_STEPS_META = [
@@ -18,18 +19,21 @@ export const VOAR_STEPS_META = [
 // Mensagens motivacionais a cada grupo de 3 etapas (Passos 3, 6 e 9)
 export const VOAR_GROUP_MILESTONES = {
   3: {
+    cycleNumber: 1,
     badge: '1º Ciclo Concluído · 3 de 9 Etapas',
     title: 'Você concluiu as 3 primeiras etapas do seu trajeto!',
     message:
       'Olhar para a própria história exige presença e sensibilidade. Se você estiver inspirado(a), siga em frente para o próximo ciclo. Mas, se quiser descansar um pouco, tomar um café e voltar depois, está tudo bem também — todo o seu progresso continuará salvo com segurança exatamente aqui.',
   },
   6: {
+    cycleNumber: 2,
     badge: '2º Ciclo Concluído · 6 de 9 Etapas',
     title: 'Dois terços da sua constelação já iluminam o caminho!',
     message:
       'Você atravessou o mergulho mais profundo das suas memórias e cartas. Honre o seu próprio ritmo: continue seu trajeto agora se desejar, ou faça uma pausa para respirar e volte quando quiser. Tudo o que você construiu permanece guardado esperando por você.',
   },
   9: {
+    cycleNumber: 3,
     badge: '3º Ciclo Concluído · 9 de 9 Etapas',
     title: 'Jornada completa! As 9 estrelas da sua voz estão acesas.',
     message:
@@ -65,12 +69,8 @@ export const CONSTELLATION_CONNECTIONS = [
 
 /**
  * Constelação minimalista gigante e sutil de fundo para as páginas do V de VOAR
- * Usa exatamente o mesmo desenho de 9 estrelas e conexões da animação do V de VOAR,
- * ampliado de ponta a ponta da tela (sem círculos/alvos).
  */
 export function VoarBackgroundConstellation() {
-  // Mesmas 9 estrelas da animação principal, posicionadas em escala ampla (1200x760)
-  // para que as pontas da constelação apareçam nas laterais dos cards
   const bgStars = [
     { id: 1, x: 95, y: 230, r: 5, label: '01', primary: true },
     { id: 2, x: 205, y: 365, r: 4.2, label: '02' },
@@ -102,7 +102,6 @@ export function VoarBackgroundConstellation() {
           </radialGradient>
         </defs>
 
-        {/* Conexões idênticas à animação da constelação de 9 estrelas */}
         {CONSTELLATION_CONNECTIONS.map((conn, idx) => {
           const s1 = getBgStar(conn.from);
           const s2 = getBgStar(conn.to);
@@ -122,7 +121,6 @@ export function VoarBackgroundConstellation() {
           );
         })}
 
-        {/* As 9 estrelas com a mesma estética de brilho, flare e numeração da animação */}
         {bgStars.map((star, idx) => (
           <g key={star.id} className="voar-bg-star-node">
             <circle
@@ -170,7 +168,6 @@ export function VoarBackgroundConstellation() {
 
 /**
  * Barra de progresso + mini-constelação exibida durante os 9 passos do Módulo Voz.
- * Mostra quantas etapas foram concluídas, os 3 grupos de 3 etapas e a constelação acendendo junto.
  */
 export function VoarStepProgressBar({ currentStep = 1, isStepDone = false }) {
   const completedCount = isStepDone ? currentStep : Math.max(0, currentStep - 1);
@@ -272,10 +269,15 @@ export function VoarStepProgressBar({ currentStep = 1, isStepDone = false }) {
 }
 
 /**
- * SVG da Constelação de 9 Estrelas (usado na celebração de cada passo e na Conclusão).
+ * SVG da Constelação de 9 Estrelas:
+ * - mode="step": acende a estrela do passo atual.
+ * - mode="cycle": acende sequencialmente (uma a uma) as 3 estrelas do ciclo recém-concluído (ex: 1->2->3, 4->5->6 ou 7->8->9).
+ * - mode="full": acende todas as 9 estrelas (página de Conclusão).
+ * - animate: quando false, aguarda a tela centralizar antes de disparar a animação de acendimento.
  */
-export function VoarConstellationSvg({ completedStep = 9, mode = 'step' }) {
+export function VoarConstellationSvg({ completedStep = 9, mode = 'step', animate = true }) {
   const getStarById = (id) => CONSTELLATION_STARS.find((s) => s.id === id);
+  const cycleStart = mode === 'cycle' ? Math.max(1, completedStep - 2) : completedStep;
 
   return (
     <div className="voar-constellation-canvas" aria-hidden="true">
@@ -324,6 +326,7 @@ export function VoarConstellationSvg({ completedStep = 9, mode = 'step' }) {
           const minStar = Math.min(conn.from, conn.to);
 
           if (mode === 'full') {
+            if (!animate) return null;
             const delay = `${0.25 + idx * 0.2}s`;
             return (
               <line
@@ -338,8 +341,40 @@ export function VoarConstellationSvg({ completedStep = 9, mode = 'step' }) {
             );
           }
 
+          if (mode === 'cycle') {
+            if (maxStar > completedStep) return null;
+            const isPastCycleLine = maxStar < cycleStart;
+            if (isPastCycleLine) {
+              return (
+                <line
+                  key={`cycle-past-line-${idx}`}
+                  x1={s1.x}
+                  y1={s1.y}
+                  x2={s2.x}
+                  y2={s2.y}
+                  className={`voar-line-lit ${conn.secondary ? 'is-secondary' : ''}`}
+                />
+              );
+            }
+            if (!animate) return null;
+            // Linha pertencente ao ciclo atual: acende após a estrela maxStar começar a acender
+            const stepOffset = Math.max(0, maxStar - cycleStart); // 0, 1 ou 2
+            const lineDelay = `${0.35 + stepOffset * 0.85}s`;
+            return (
+              <line
+                key={`cycle-anim-line-${idx}`}
+                x1={s1.x}
+                y1={s1.y}
+                x2={s2.x}
+                y2={s2.y}
+                className={`voar-line-animating ${conn.secondary ? 'is-secondary' : ''}`}
+                style={{ animationDelay: lineDelay }}
+              />
+            );
+          }
+
           const isAlreadyLit = maxStar < completedStep;
-          const isIgnitingNow = maxStar === completedStep && minStar < completedStep;
+          const isIgnitingNow = animate && maxStar === completedStep && minStar < completedStep;
 
           if (!isAlreadyLit && !isIgnitingNow) return null;
 
@@ -364,10 +399,19 @@ export function VoarConstellationSvg({ completedStep = 9, mode = 'step' }) {
 
         {/* 3. As 9 estrelas */}
         {CONSTELLATION_STARS.map((star, idx) => {
-          const isPastLit = mode === 'step' && star.id < completedStep;
-          const isCurrentIgniting = mode === 'step' && star.id === completedStep;
-          const isUnlit = mode === 'step' && star.id > completedStep;
+          const isPastLit =
+            (mode === 'step' && star.id < completedStep) ||
+            (mode === 'cycle' && star.id < cycleStart);
+          const isCurrentIgniting = animate && mode === 'step' && star.id === completedStep;
+          const isCycleSequentialStar =
+            animate && mode === 'cycle' && star.id >= cycleStart && star.id <= completedStep;
+          const isUnlit =
+            (mode === 'step' && (star.id > completedStep || (!animate && star.id === completedStep))) ||
+            (mode === 'cycle' && (star.id > completedStep || (!animate && star.id >= cycleStart)));
+
           const fullDelay = `${0.12 + idx * 0.22}s`;
+          const cycleStarOffset = star.id - cycleStart; // 0, 1, 2
+          const cycleStarDelay = `${0.25 + cycleStarOffset * 0.85}s`;
 
           return (
             <g key={star.id} className="voar-star-node">
@@ -383,13 +427,22 @@ export function VoarConstellationSvg({ completedStep = 9, mode = 'step' }) {
                 y={star.y - (star.r + 7)}
                 textAnchor="middle"
                 className={`voar-star-number ${
-                  isUnlit ? 'is-unlit' : isCurrentIgniting ? 'is-igniting' : 'is-lit'
+                  isUnlit
+                    ? 'is-unlit'
+                    : isCurrentIgniting || isCycleSequentialStar
+                      ? 'is-igniting'
+                      : 'is-lit'
                 }`}
+                style={
+                  isCycleSequentialStar
+                    ? { animationDelay: cycleStarDelay }
+                    : undefined
+                }
               >
                 {star.label}
               </text>
 
-              {mode === 'full' && (
+              {mode === 'full' && animate && (
                 <g className="voar-star-full-anim" style={{ animationDelay: fullDelay }}>
                   <circle
                     cx={star.x}
@@ -432,6 +485,40 @@ export function VoarConstellationSvg({ completedStep = 9, mode = 'step' }) {
                 </g>
               )}
 
+              {isCycleSequentialStar && (
+                <g
+                  className="voar-star-cycle-seq-group"
+                  style={{ animationDelay: cycleStarDelay }}
+                >
+                  <circle
+                    cx={star.x}
+                    cy={star.y}
+                    r={star.r * 2.1}
+                    className="voar-star-cycle-ring"
+                    style={{ animationDelay: cycleStarDelay }}
+                  />
+                  <circle
+                    cx={star.x}
+                    cy={star.y}
+                    r={star.r * 4.4}
+                    fill="url(#voarNewStarBurst)"
+                    className="voar-star-ignition-aura"
+                    style={{ animationDelay: cycleStarDelay }}
+                  />
+                  <g className="voar-star-ignition-flare">
+                    <line x1={star.x - 12} y1={star.y} x2={star.x + 12} y2={star.y} />
+                    <line x1={star.x} y1={star.y - 12} x2={star.x} y2={star.y + 12} />
+                  </g>
+                  <circle
+                    cx={star.x}
+                    cy={star.y}
+                    r={star.r * 1.18}
+                    className="voar-star-cycle-core"
+                    style={{ animationDelay: cycleStarDelay }}
+                  />
+                </g>
+              )}
+
               {isCurrentIgniting && (
                 <g className="voar-star-igniting-group">
                   <circle
@@ -468,57 +555,93 @@ export function VoarConstellationSvg({ completedStep = 9, mode = 'step' }) {
 }
 
 /**
- * Tela de transição com fade suave exibida ao concluir cada um dos 9 passos.
- * A cada 3 etapas (Passos 3, 6 e 9), exibe também o card motivacional de ciclo,
- * lembrando que a pessoa pode continuar ou descansar com o progresso salvo.
+ * Tela de transição exibida ao concluir cada passo.
+ * - Nos passos 1, 2, 4, 5, 7 e 8: acende a estrela do passo concluído.
+ * - Nos passos 3, 6 e 9 (fim de cada ciclo de 3 passos): acende uma a uma as 3 estrelas
+ *   do ciclo recém-concluído e exibe o texto de conclusão da etapa.
+ * - Renderiza com fundo 100% sólido e isolado, sem nenhum conteúdo do passo anterior no fundo.
  */
 export function VoarStepCelebration({ stepNumber, onContinue }) {
   const navigate = useNavigate();
+  const [readyToIgnite, setReadyToIgnite] = useState(false);
   const meta = VOAR_STEPS_META.find((m) => m.step === stepNumber) || VOAR_STEPS_META[0];
   const isFinalStep = stepNumber === 9;
   const groupMilestone = VOAR_GROUP_MILESTONES[stepNumber];
 
-  return (
+  useEffect(() => {
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    const timer = setTimeout(() => {
+      window.scrollTo(0, 0);
+      setReadyToIgnite(true);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+    };
+  }, [stepNumber]);
+
+  const handleProceed = () => {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    window.scrollTo(0, 0);
+    if (onContinue) onContinue();
+  };
+
+  const handleRestAndReturn = () => {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    window.scrollTo(0, 0);
+    navigate('/voar/voz');
+  };
+
+  const cycleStart = groupMilestone ? stepNumber - 2 : stepNumber;
+
+  const content = (
     <div className="voar-celebration-overlay" role="dialog" aria-modal="true">
       <div className="voar-celebration-inner">
         <div className="voar-celebration-top">
           <span className="voar-celebration-counter">
-            ESTRELAS ACESAS · 0{stepNumber} / 09
+            {groupMilestone
+              ? `ESTRELAS 0${cycleStart} · 0${cycleStart + 1} · 0${stepNumber} ACESAS (${stepNumber} / 09)`
+              : `ESTRELAS ACESAS · 0${stepNumber} / 09`}
           </span>
         </div>
 
         <div className="voar-celebration-stage">
-          <VoarConstellationSvg completedStep={stepNumber} mode="step" />
+          <VoarConstellationSvg
+            completedStep={stepNumber}
+            mode={groupMilestone ? 'cycle' : 'step'}
+            animate={readyToIgnite}
+          />
 
           <div className="voar-celebration-text">
             <span className="voar-celebration-eyebrow voar-fade-up-1">
               <Sparkles size={13} strokeWidth={1.6} />
-              <span>Passo {stepNumber} Concluído · {meta.title}</span>
+              <span>
+                {groupMilestone
+                  ? groupMilestone.badge
+                  : `Passo ${stepNumber} Concluído · ${meta.title}`}
+              </span>
             </span>
 
             <h2 className="voar-celebration-headline voar-fade-up-2">
-              {isFinalStep
-                ? 'A 9ª estrela se acendeu. Sua constelação está completa.'
+              {groupMilestone
+                ? groupMilestone.title
                 : stepNumber === 1
                   ? 'A primeira estrela da sua constelação se acendeu.'
                   : `A ${stepNumber}ª estrela da sua constelação se acendeu.`}
             </h2>
 
             <p className="voar-celebration-subtext voar-fade-up-3">
-              {meta.subtitle}
+              {groupMilestone ? groupMilestone.message : meta.subtitle}
             </p>
-
-            {/* Mensagem motivacional especial a cada grupo de 3 etapas (Passos 3, 6 e 9) */}
-            {groupMilestone && (
-              <div className="voar-milestone-pause-card voar-fade-up-3">
-                <div className="milestone-pause-badge">
-                  <Coffee size={13} />
-                  <span>{groupMilestone.badge}</span>
-                </div>
-                <strong className="milestone-pause-title">{groupMilestone.title}</strong>
-                <p className="milestone-pause-desc">{groupMilestone.message}</p>
-              </div>
-            )}
           </div>
         </div>
 
@@ -527,19 +650,22 @@ export function VoarStepCelebration({ stepNumber, onContinue }) {
             <button
               type="button"
               className="voar-celebration-btn-rest"
-              onClick={() => navigate('/')}
+              onClick={handleRestAndReturn}
             >
               <Coffee size={15} strokeWidth={1.5} />
               <span>Descansar e voltar depois</span>
             </button>
           )}
+
           <button
             type="button"
             className="voar-celebration-btn"
-            onClick={onContinue}
+            onClick={handleProceed}
           >
             <span>
-              {isFinalStep ? 'Ver Síntese do Módulo Voz' : `Avançar para o Passo ${stepNumber + 1}`}
+              {isFinalStep
+                ? 'Ver Síntese do Módulo Voz'
+                : `Avançar para o Passo ${stepNumber + 1}`}
             </span>
             <ArrowRight size={17} strokeWidth={1.5} />
           </button>
@@ -547,4 +673,9 @@ export function VoarStepCelebration({ stepNumber, onContinue }) {
       </div>
     </div>
   );
+
+  if (typeof document !== 'undefined' && document.body) {
+    return createPortal(content, document.body);
+  }
+  return content;
 }

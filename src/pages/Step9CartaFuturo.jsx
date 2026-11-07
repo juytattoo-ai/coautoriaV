@@ -64,6 +64,10 @@ export default function Step9CartaFuturo() {
   const handleFileSelect = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        alert('A imagem deve ter no máximo 5 MB. Por favor, escolha uma foto menor.');
+        return;
+      }
       setFile(selectedFile);
       setPreview(URL.createObjectURL(selectedFile));
       setIsSaved(false);
@@ -93,7 +97,7 @@ export default function Step9CartaFuturo() {
       if (file && !isSaved) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${user.id}-future-${Date.now()}.${fileExt}`;
-        const filePath = `letters/${fileName}`;
+        const filePath = `${user.id}/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('letters')
@@ -133,14 +137,17 @@ export default function Step9CartaFuturo() {
 
   const allChecked = Object.values(checklist).every(Boolean);
 
+  if (showCelebration) {
+    return (
+      <VoarStepCelebration
+        stepNumber={9}
+        onContinue={() => navigate('/conclusao')}
+      />
+    );
+  }
+
   return (
     <div className="page-container animate-fade-in">
-      {showCelebration && (
-        <VoarStepCelebration
-          stepNumber={9}
-          onContinue={() => navigate('/conclusao')}
-        />
-      )}
       <header className="page-header flex justify-between items-center w-full">
         <div className="flex gap-4">
           <button className="back-btn" onClick={() => navigate('/')}>
