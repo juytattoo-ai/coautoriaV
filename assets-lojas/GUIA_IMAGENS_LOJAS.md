@@ -1,30 +1,67 @@
-# Guia de Imagens para Play Store, App Store e Ícones Nativos
+# Guia de Imagens e Publicação nas Lojas — CoAutoria
 
-Esta pasta (`d:\docs\coautoria V\assets-lojas\`) está organizada para você guardar todas as imagens de publicação do **CoAutoria**.
-
----
-
-## 1. Subpasta `icones-e-splash/` (Gerador Automático do App Nativo)
-Coloque aqui os arquivos-base que serão usados para gerar todos os tamanhos de ícone e tela de abertura (Splash Screen) do Android e do iOS:
-- **`icon.png`** — Tamanho do arquivo: **`1024 x 1024 px`** (PNG, fundo sólido `#fbf9f5` sem transparência).
-  - *Tamanho da logo dentro do arquivo:* cerca de **`700 x 700 px`** centralizada (deixe ~160 px de margem em cada lado para os ícones redondos não cortarem a logo).
-- **`splash.png`** — Tamanho do arquivo: **`2732 x 2732 px`** (PNG, fundo creme `#fbf9f5`).
-  - *Tamanho da logo dentro do arquivo:* **pequena no centro**, com cerca de **`650 x 650 px` a `800 x 800 px`** (aprox. 25% do arquivo), deixando todo o restante ao redor apenas com o fundo creme `#fbf9f5`. Isso é obrigatório porque os celulares cortam as laterais do quadrado (`2732x2732`) e o Android 12+ recorta um círculo central na abertura.
-
-*(Obs.: Você também pode copiar esses dois arquivos para a pasta `d:\docs\coautoria V\resources\` quando quiser rodar `npx capacitor-assets generate` para gerar automaticamente todos os ícones nas pastas `android/` e `ios/`).*
+Todas as imagens e capturas de tela deste diretório já foram tratadas, redimensionadas nas medidas oficiais e convertidas para **PNG 24-bits sem transparência (RGB)** prontas para upload.
 
 ---
 
-## 2. Subpasta `play-store/` (Google Play Console — Android)
-Coloque aqui os arquivos que serão enviados diretamente no painel da Google Play:
-1. **`icone-play-store-512x512.png`** — Tamanho exato: **`512 x 512 px`** (PNG 32-bit, até 1 MB).
-2. **`feature-graphic-1024x500.png`** *(Gráfico de Recurso / Banner de Destaque)* — Tamanho exato: **`1024 x 500 px`** (PNG ou JPG sem transparência).
-3. **`prints-celular/`** — De **4 a 8 prints** verticais (proporção 9:16, ex: `1080 x 1920 px` ou `1080 x 2400 px` do Xiaomi), **sem barra de endereço do navegador**.
+## 1. Arquivos Prontos para Apple App Store (`assets-lojas/app-store/`)
+- **Ícone 1024x1024 (sem canal alfa):** `logo-pena1024.png` (`1024 x 1024 px`)
+- **6 Screenshots iPhone 6.7" / 6.9" (`1290 x 2796 px`):**
+  1. `01-inicio.png` — Tela Inicial da Jornada
+  2. `02-modulo-voz.png` — Apresentação e Sigilo do Módulo Voz
+  3. `03-constelacao-voar.png` — Constelação V de VOAR (9 Estrelas Conectadas)
+  4. `04-minhas-historias.png` — Acervo Pessoal (Áudios e Escritos)
+  5. `05-roda-historias.png` — Comunidade Roda de Histórias
+  6. `06-perfil.png` — Acesso e Gestão da Conta
 
 ---
 
-## 3. Subpasta `app-store/` (App Store Connect — iOS / iPhone)
-Coloque aqui os arquivos que serão enviados no painel da Apple:
-1. **`icone-app-store-1024x1024.png`** — Tamanho exato: **`1024 x 1024 px`** (PNG **obrigatoriamente sem transparência/canal alfa** e sem cantos arredondados — o próprio iOS arredonda os cantos).
-2. **`prints-iphone-6.7/`** (ou `6.5"`) — De **4 a 8 prints** em retrato (`1290 x 2796 px` para iPhone 6.7" ou `1242 x 2688 px` / `1284 x 2778 px` para iPhone 6.5"), **sem barra do Safari**.
+## 2. Arquivos Prontos para Google Play Store (`assets-lojas/play-store/`)
+- **Ícone de Alta Resolução (`512 x 512 px`):** `512.png`
+- **Gráfico de Recursos / Feature Graphic (`1024 x 500 px`):** `Banner.png`
+- **6 Screenshots Full HD 9:16 (`1080 x 1920 px`, sem barra de status iOS):**
+  1. `01-inicio.png`
+  2. `02-modulo-voz.png`
+  3. `03-constelacao-voar.png`
+  4. `04-minhas-historias.png`
+  5. `05-roda-historias.png`
+  6. `06-perfil.png`
 
+---
+
+## 3. Ícones e Splash Nativos (`resources/`, `ios/` e `android/`)
+- Os arquivos base em `resources/icon.png` (`1024 x 1024 px`) e `resources/splash.png` (`2732 x 2732 px`) já foram aplicados automaticamente em:
+  - **iOS:** `ios/App/App/Assets.xcassets/AppIcon.appiconset/` e `Splash.imageset/`
+  - **Android:** `android/app/src/main/res/mipmap-*` e `drawable-*/splash.png`
+
+---
+
+## 4. Passo a Passo Rápido para Publicar no iOS (Mac / Xcode)
+Para quem clonar este repositório no Mac para subir na **Apple App Store**:
+
+1. **Instalar dependências:**
+   ```bash
+   npm install
+   ```
+2. **Configurar o arquivo `.env` na raiz do projeto** (com as chaves do Supabase de produção):
+   ```env
+   VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
+   VITE_SUPABASE_ANON_KEY=SUA_ANON_KEY
+   ```
+3. **Gerar o build web e sincronizar com o projeto iOS:**
+   ```bash
+   npm run build
+   npx cap sync ios
+   ```
+4. **Abrir no Xcode:**
+   ```bash
+   npx cap open ios
+   ```
+5. **No Xcode (`Signing & Capabilities`):**
+   - Selecionar o **Team** da conta Apple Developer.
+   - Conferir o Bundle Identifier (`br.com.coautoria.app`).
+   - Selecionar o destino **Any iOS Device (arm64)** e clicar em **Product > Archive** -> **Distribute App** -> **App Store Connect**.
+6. **No App Store Connect:**
+   - **URL da Política de Privacidade:** `https://coautoria-v.vercel.app/privacidade`
+   - **URL dos Termos de Uso (EULA):** `https://coautoria-v.vercel.app/termos`
+   - **App Review Information (Sign-In Required):** Fornecer um e-mail e senha de uma conta de teste criada no app para o revisor da Apple testar as etapas do Método V.O.A.R. e a exclusão de conta em *Perfil > Zona de Segurança > Excluir Minha Conta*.
